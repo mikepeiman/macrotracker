@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
@@ -14,25 +14,27 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="nav-fixed blue mb-5">
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo left">MacroValue</a>
-      <div class="container pt-7">
+  <div class="navbar-fixed mb-5">
+    <nav class="blue">
+      <div class="nav-wrapper row">
+        <a href="#" class="brand-logo left">MacroValue</a>
+        <div class="container col s8 offset-s4">
+          <ul class="right row">
 
-        <ul class="right">
-          <li>
             <a href="#" class="clear-btn btn blue lighten-3">About</a>
-          </li>
-          <li>
+
+
             <a href="#" class="clear-btn btn blue lighten-3">Contact</a>
-          </li>
-          <li>
+
+
             <a href="#" class="clear-btn btn blue lighten-3">Account</a>
-          </li>
-        </ul>
+
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
+
 
   <br>
 
@@ -44,12 +46,25 @@
         <form class="col">
           <div class="row">
             <div class="input-field col s6">
-              <input type="text" placeholder="Add Item" id="item-name">
-              <label for="item-name">Meal/Grocery Item</label>
+              <input type="text" placeholder="Add Item" id="item-name-input">
+              <label for="item-name-input">Meal/Grocery Item</label>
             </div>
             <div class="input-field col s6">
-              <input type="text" placeholder="price" id="item-price">
+              <input type="text" placeholder="Brand" id="item-brand">
+              <label for="item-brand">Brand</label>
+            </div>
+            <div class="input-field col s6">
+              <input type="text" placeholder="Add Source" id="item-source">
+              <label for="item-source">On sale where?</label>
+            </div>
+            <div class="input-field col s6">
+              <input type="text" placeholder="Price" id="item-price">
               <label for="item-price">Price</label>
+            </div>
+
+            <div class="input-field col s6">
+              <input type="text" placeholder="grams" id="item-amount">
+              <label for="item-amount">Amount (g)</label>
             </div>
             <div class="input-field col s2">
               <input type="text" placeholder="protein" id="item-protein">
@@ -118,46 +133,70 @@
       </li>
 
     </ul> -->
-    <div class="container center"><a href="#" class="clear-btn btn orange darken-3">Clear All Data</a></div>
+    <div class="container center">
+      <a href="#" class="clear-btn btn orange darken-3">Clear All Data</a>
+    </div>
     <table>
       <thead>
         <tr>
           <th>Meal/Grocery Item</th>
-          <th>$/Protein</th>
-          <th>$/Fat</th>
-          <th>$/Carbs</th>
+          <th>Amount & Price</th>
+          <th>Protein</th>
+          <th>Fat</th>
+          <th>Carbs</th>
           <th>Calories</th>
-          <th>$/Calorie</th>
         </tr>
       </thead>
 
-      <tbody>
+      <tbody id="items-list">
         <tr class="food-item" id="item-0">
           <td>
-            <span class="table-item center">
-              <span class="table-item-name-data em">Cashews</span>,
-              <span class="table-item-source-data">Safeway</span>
+            <span class="table-item">
+              <span class="item-name-data em">Cashews</span>
             </span>
-            <span class="table-item center">
-              <span class="table-item-amount-data">900g</span> @
-              <span class="table-item-price-data">$18.99</span>
+            <span class="table-item">
+              <span class="item item-brand-data">Dan-D-Pak</span>
+              <span class="spacer-1">,</span>
+              <span class="item item-source-data">Safeway</span>
             </span>
           </td>
-          <td class="table-item price-per-gram-protein center">
-            <span class="table-item-name-data">670g</span>
-            <span class="table-item-source-data">$0.37/g</span>
+          <td>
+            <span class="table-item vertical">
+              <span class="item item-amount-data">900g</span>
+              <span class="item item-price-data">$18.99</span>
+            </span>
           </td>
-          <td class="price-per-gram-fat center">.47</td>
-          <td class="price-per-gram-carbs center">.57</td>
-          <td class="total-calories center">2770</td>
-          <td class="price-per-calorie center">.17</td>
+          <td>
+            <span class="table-item vertical fat">
+              <span class="item total-fat">50</span>
+              <span class="item price-per-gram-fat">.40</span>
+            </span>
+          </td>
+          <td>
+            <span class="table-item vertical carbs">
+              <span class="item total-carbs">120</span>
+              <span class="item price-per-gram-carbs">.20</span>
+            </span>
+          </td>
+          <td>
+              <span class="table-item vertical protein">
+                <span class="item total-protein">90</span>
+                <span class="item price-per-gram-protein">.50</span>
+              </span>
+            </td>
+          <td>
+            <span class="table-item vertical calories">
+              <span class="item total-calories">890</span>
+              <span class="item price-per-gram-calories">.05</span>
+            </span>
+          </td>
           <td>
             <a href="#" class="secondary-content">
               <i class="fa fa-pencil"></i>
             </a>
           </td>
-
         </tr>
+
         <tr class="collection-item" id="item-0">
           <td>
             <span class="table-item center">
@@ -209,7 +248,10 @@
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+  <script src="app.js"></script>
 </body>
 
 </html>
