@@ -1,7 +1,12 @@
+.em {
+  font-weight: bold;
+}
 #brand-logo {
   padding: 0 5px;
 }
-
+.table-item {
+  display: block;
+}
 .bg-dark {
   background: rgba(0,0,0,0.1);
 }

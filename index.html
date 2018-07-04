@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
   <title>MacroValue - Macronutrient Price Calculator</title>
 </head>
+
 <body>
   <!-- Navbar -->
   <nav class="nav-fixed blue mb-5">
     <div class="nav-wrapper">
       <a href="#" class="brand-logo left">MacroValue</a>
       <div class="container pt-7">
-        
+
         <ul class="right">
-          <li><a href="#" class="clear-btn btn blue lighten-3">About</a></li>
-          <li><a href="#" class="clear-btn btn blue lighten-3">Contact</a></li>
-          <li><a href="#" class="clear-btn btn blue lighten-3">Account</a></li>
+          <li>
+            <a href="#" class="clear-btn btn blue lighten-3">About</a>
+          </li>
+          <li>
+            <a href="#" class="clear-btn btn blue lighten-3">Contact</a>
+          </li>
+          <li>
+            <a href="#" class="clear-btn btn blue lighten-3">Account</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -34,70 +43,173 @@
         <span class="card-title">Add Grocery Item</span>
         <form class="col">
           <div class="row">
-            <div class="input-field col s4">
+            <div class="input-field col s6">
               <input type="text" placeholder="Add Item" id="item-name">
               <label for="item-name">Meal/Grocery Item</label>
             </div>
-            <div class="input-field col s2">
-                <input type="text" placeholder="protein" id="item-protein">
-                <label for="item-protein">Protein</label>
+            <div class="input-field col s6">
+              <input type="text" placeholder="price" id="item-price">
+              <label for="item-price">Price</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" placeholder="fat" id="item-fat">
-                <label for="item-fat">Fat</label>
+              <input type="text" placeholder="protein" id="item-protein">
+              <label for="item-protein">Protein</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" placeholder="carbs" id="item-carbs">
-                <label for="item-carbs">Carbs</label>
+              <input type="text" placeholder="fat" id="item-fat">
+              <label for="item-fat">Fat</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" placeholder="price" id="item-price">
-                <label for="item-price">Price</label>
+              <input type="text" placeholder="carbs" id="item-carbs">
+              <label for="item-carbs">Carbs</label>
             </div>
-            <button class="add-btn btn blue darken-3"><i class="fa fa-plus"></i> Add Meal</button>
-<!--             
+            <div class="input-field col s3">
+              <input type="text" placeholder="per amount" id="item-per-amount">
+              <label for="item-per-amount">Per Amount</label>
+            </div>
+
+            <button class="add-btn btn blue">
+              <i class="fa fa-plus"></i> Add Meal</button>
+            <!--             
             <button class="update-btn btn orange"><i class="fa fa-pencil-square-o"></i> Update Meal</button>
             <button class="delete-btn btn red"><i class="fa fa-remove"></i> Delete Meal</button>
             -->
-            <button class="back-btn btn grey pull-right"><i class="fa fa-chevron-circle-left"></i> Back</button>
+            <button class="back-btn btn grey pull-right">
+              <i class="fa fa-chevron-circle-left"></i> Back</button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- Calorie Count -->
-    <h3 class="center-align">Total Calories: <span class="total-calories">0</span></h3>
+    <!-- <h3 class="center-align">Total Calories:
+      <span class="total-calories">0</span>
+    </h3> -->
 
     <!-- Item List -->
-    <ul id="item-list" class="collection">
-<!--       
-      <li class="collection-item" id="item-0">
-        <strong>Steak Dinner: </strong> <em>1200 Calories</em>
+    <!-- <ul id="item-list" class="collection">
+
+      <li class="collection-item row" id="item-0">
+        <div class="item-name col s3">
+          <strong>Steak Dinner: </strong>
+        </div>
+        <div class="item-name col s2">
+          <a class="waves-effect waves-light btn-small blue darken-3">Button</a>
+        </div>
+        <div class="item-name col s2"></div>
+
         <a href="#" class="secondary-content">
           <i class="fa fa-pencil"></i>
         </a>
       </li>
       <li class="collection-item" id="item-0">
-        <strong>Cookie: </strong> <em>400 Calories</em>
+        <strong>Cookie: </strong>
+        <em>400 Calories</em>
         <a href="#" class="secondary-content">
           <i class="fa fa-pencil"></i>
         </a>
       </li>
       <li class="collection-item" id="item-0">
-        <strong>Eggs: </strong> <em>300 Calories</em>
+        <strong>Eggs: </strong>
+        <em>300 Calories</em>
         <a href="#" class="secondary-content">
           <i class="fa fa-pencil"></i>
         </a>
       </li>
-    -->
-    </ul>
+
+    </ul> -->
+    <div class="container center"><a href="#" class="clear-btn btn orange darken-3">Clear All Data</a></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Meal/Grocery Item</th>
+          <th>$/Protein</th>
+          <th>$/Fat</th>
+          <th>$/Carbs</th>
+          <th>Calories</th>
+          <th>$/Calorie</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="food-item" id="item-0">
+          <td>
+            <span class="table-item center">
+              <span class="table-item-name-data em">Cashews</span>,
+              <span class="table-item-source-data">Safeway</span>
+            </span>
+            <span class="table-item center">
+              <span class="table-item-amount-data">900g</span> @
+              <span class="table-item-price-data">$18.99</span>
+            </span>
+          </td>
+          <td class="table-item price-per-gram-protein center">
+            <span class="table-item-name-data">670g</span>
+            <span class="table-item-source-data">$0.37/g</span>
+          </td>
+          <td class="price-per-gram-fat center">.47</td>
+          <td class="price-per-gram-carbs center">.57</td>
+          <td class="total-calories center">2770</td>
+          <td class="price-per-calorie center">.17</td>
+          <td>
+            <a href="#" class="secondary-content">
+              <i class="fa fa-pencil"></i>
+            </a>
+          </td>
+
+        </tr>
+        <tr class="collection-item" id="item-0">
+          <td>
+            <span class="table-item center">
+              <span class="table-item-name-data em">Cashews</span>,
+              <span class="table-item-source-data">Safeway</span>
+            </span>
+            <span class="table-item center">
+              <span class="table-item-amount-data">900g</span> @
+              <span class="table-item-price-data">$18.99</span>
+            </span>
+          </td>
+          <td class="price-per-gram-protein center">.37</td>
+          <td class="price-per-gram-fat center">.47</td>
+          <td class="price-per-gram-carbs center">.57</td>
+          <td class="total-calories center">2770</td>
+          <td class="price-per-calorie center">.17</td>
+          <td>
+            <a href="#" class="secondary-content">
+              <i class="fa fa-pencil"></i>
+            </a>
+          </td>
+        </tr>
+        <tr class="collection-item" id="item-0">
+          <td>
+            <span class="table-item center">
+              <span class="table-item-name-data em">Cashews</span>,
+              <span class="table-item-source-data">Safeway</span>
+            </span>
+            <span class="table-item center">
+              <span class="table-item-amount-data">900g</span> @
+              <span class="table-item-price-data">$18.99</span>
+            </span>
+          </td>
+          <td class="price-per-gram-protein center">.37</td>
+          <td class="price-per-gram-fat center">.47</td>
+          <td class="price-per-gram-carbs center">.57</td>
+          <td class="total-calories center">2770</td>
+          <td class="price-per-calorie center">.17</td>
+          <td>
+            <a href="#" class="secondary-content">
+              <i class="fa fa-pencil"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>    
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </body>
+
 </html>
