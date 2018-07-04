@@ -4,70 +4,100 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>MacroTracker</title>
-   <!--Import Google Icon Font-->
-   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Materialize UI framework compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="styles.css">
-
-
+  <title>MacroValue - Macronutrient Price Calculator</title>
 </head>
 <body>
-  <div class="navbar-fixed">
-    <nav>
-      <div class="nav-wrapper blue">
-        <div class="container">
-          <a href="#" class="brand-logo left">M.Trakr</a>
-          <ul class="right">
-            <li><a href="" class="clear-btn btn blue lighten-3">Clear All</a></li>
-          </ul>        
-          <form class="center">
-              <div class="input-field right">
-                <input id="search" type="search" required>
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
-            </form>
-        </div>
+  <!-- Navbar -->
+  <nav class="nav-fixed blue mb-5">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo left">MacroValue</a>
+      <div class="container pt-7">
+        
+        <ul class="right">
+          <li><a href="#" class="clear-btn btn blue lighten-3">About</a></li>
+          <li><a href="#" class="clear-btn btn blue lighten-3">Contact</a></li>
+          <li><a href="#" class="clear-btn btn blue lighten-3">Account</a></li>
+        </ul>
       </div>
-    </nav>
-  </div>
-  
+    </div>
+  </nav>
+
+  <br>
+
   <div class="container">
+    <!-- Form Card -->
     <div class="card">
       <div class="card-content">
-        <span class="card-title">Add Item</span>
-        <form action="" class="col">
+        <span class="card-title">Add Grocery Item</span>
+        <form class="col">
           <div class="row">
-            <div class="input-field col s6">
-              <input type="text" id="item-name" placeholder="Track Item">
-              <label for="item-name">Item</label>
+            <div class="input-field col s4">
+              <input type="text" placeholder="Add Item" id="item-name">
+              <label for="item-name">Meal/Grocery Item</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" id="item-name" placeholder="Protein">
-                <label for="item-name">Grams</label>
+                <input type="text" placeholder="protein" id="item-protein">
+                <label for="item-protein">Protein</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" id="item-name" placeholder="Fat">
-                <label for="item-name">Grams</label>
+                <input type="text" placeholder="fat" id="item-fat">
+                <label for="item-fat">Fat</label>
             </div>
             <div class="input-field col s2">
-                <input type="text" id="item-name" placeholder="Carbs">
-                <label for="item-name">Grams</label>
+                <input type="text" placeholder="carbs" id="item-carbs">
+                <label for="item-carbs">Carbs</label>
             </div>
+            <div class="input-field col s2">
+                <input type="text" placeholder="price" id="item-price">
+                <label for="item-price">Price</label>
+            </div>
+            <button class="add-btn btn blue darken-3"><i class="fa fa-plus"></i> Add Meal</button>
+<!--             
+            <button class="update-btn btn orange"><i class="fa fa-pencil-square-o"></i> Update Meal</button>
+            <button class="delete-btn btn red"><i class="fa fa-remove"></i> Delete Meal</button>
+            -->
+            <button class="back-btn btn grey pull-right"><i class="fa fa-chevron-circle-left"></i> Back</button>
           </div>
         </form>
       </div>
     </div>
+
+    <!-- Calorie Count -->
+    <h3 class="center-align">Total Calories: <span class="total-calories">0</span></h3>
+
+    <!-- Item List -->
+    <ul id="item-list" class="collection">
+<!--       
+      <li class="collection-item" id="item-0">
+        <strong>Steak Dinner: </strong> <em>1200 Calories</em>
+        <a href="#" class="secondary-content">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </li>
+      <li class="collection-item" id="item-0">
+        <strong>Cookie: </strong> <em>400 Calories</em>
+        <a href="#" class="secondary-content">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </li>
+      <li class="collection-item" id="item-0">
+        <strong>Eggs: </strong> <em>300 Calories</em>
+        <a href="#" class="secondary-content">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </li>
+    -->
+    </ul>
   </div>
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-  <!-- Materialize framework compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-  <script src="app.js"></script> 
+
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>    
 </body>
 </html>

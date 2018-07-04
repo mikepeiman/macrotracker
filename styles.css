@@ -1,3 +1,26 @@
 #brand-logo {
   padding: 0 5px;
 }
+
+.bg-dark {
+  background: rgba(0,0,0,0.1);
+}
+
+.m-1 {
+  margin: 1%;
+}
+.mt-5 {
+  margin-top: 5%;
+}
+.mb-5 {
+  margin-bottom: 5%;
+}
+.p-3 {
+  padding: 3%;
+}
+.pt-5 {
+  padding-top: 5%;
+}
+.pt-7 {
+  padding-top: 7%;
+}
