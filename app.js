@@ -35,6 +35,7 @@ const ItemCtrl = (function() {
   const Item = function(id, name, price, brand, source, amount, protein, fat, carbs, per) {
     this.id = id
     this.name = name
+    this.brand = brand
     this.price = price
     this.source = source
     this.amount = amount
@@ -42,15 +43,15 @@ const ItemCtrl = (function() {
     this.fat = fat
     this.carbs = carbs
     this.per = per
-    this.servings = amount / per
-    this.totalProtein = protein * this.servings
-    this.totalCarbs = carbs * this.servings
-    this.totalFat = fat * this.servings
-    this.pricePerFat = price / this.totalFat
-    this.pricePerCarbs = price / this.totalCarbs
-    this.pricePerProtein = price / this.totalProtein
-    this.totalCalories = ((this.protein + this.carbs) * 4 + (this.fat * 9))
-    this.pricePerCalorie = price / this.totalCalories
+    this.servings = Math.round((amount / per)*100)/100
+    this.totalProtein = Math.round((protein * this.servings)*100)/100
+    this.totalCarbs = Math.round((carbs * this.servings)*100)/100
+    this.totalFat = Math.round((fat * this.servings)*100)/100
+    this.pricePerFat = Math.round((price / this.totalFat)*100)/100
+    this.pricePerCarbs = Math.round((price / this.totalCarbs)*100)/100
+    this.pricePerProtein = Math.round((price / this.totalProtein)*100)/100
+    this.totalCalories = Math.round(((this.protein + this.carbs) * 4 + (this.fat * 9))*100)/100
+    this.pricePerCalorie = Math.round((price / this.totalCalories)*100)/100
   }
 
   // Data structure / State
@@ -105,13 +106,15 @@ const ItemCtrl = (function() {
     logData: function() {
       return data
     },
-    calculateNewItem: function() {
+    calculateNewItems: function() {
       // console.log(data.items)
+      const newItems = []
       data.items.forEach(function(item){
-        console.log(item)
         let newItem = new Item(item.id, item.name, item.price, item.brand, item.source, item.amount, item.protein, item.fat, item.carbs, item.per)
-        console.log(`New item: ${newItem.pricePerProtein}`)
+        console.log(`New item: ${newItem.name}`)
+        newItems.push(newItem)
       })
+      return newItems
     }
   }
 })()
@@ -127,7 +130,6 @@ const UICtrl = (function() {
     populateItemList: function(items) {
       let html = ''
       items.forEach(function(item) {
-        console.log(item)
         html += `
       <tr class="food-item" id="item-${item.id}">
         <td>
@@ -166,7 +168,7 @@ const UICtrl = (function() {
         <td>
           <span class="table-item vertical calories">
             <span class="item total-calories">${item.totalCalories}</span>
-            <span class="item price-per-gram-calories">${item.pricePerCalories}</span>
+            <span class="item price-per-gram-calories">${item.pricePerCalorie}</span>
           </span>
         </td>
         <td>
@@ -197,9 +199,10 @@ const App = (function(ItemCtrl, UICtrl, StorageCtrl) {
       
       // fetch items from data store
       const items = ItemCtrl.getItems()
+      const newItems = ItemCtrl.calculateNewItems(items)
 
       // populate table with item data
-      UICtrl.populateItemList(items)
+      UICtrl.populateItemList(newItems)
     }
   }
 
