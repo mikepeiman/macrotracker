@@ -50,41 +50,42 @@
               <label for="item-name-input">Meal/Grocery Item</label>
             </div>
             <div class="input-field col s6">
-              <input type="text" placeholder="Brand" id="item-brand">
+              <input type="text" placeholder="Brand" id="item-brand-input">
               <label for="item-brand">Brand</label>
             </div>
             <div class="input-field col s4">
-              <input type="text" placeholder="Add Source" id="item-source">
+              <input type="text" placeholder="Add Source" id="item-source-input">
               <label for="item-source">On sale where?</label>
             </div>
             <div class="input-field col s4">
-              <input type="text" placeholder="$0.00" id="item-price">
+              <input type="number" placeholder="$0.00" id="item-price-input">
               <label for="item-price">Price</label>
             </div>
 
             <div class="input-field col s4">
-              <input type="text" placeholder="Grams" id="item-amount">
+              <input type="number" placeholder="Grams" id="item-amount-input">
               <label for="item-amount">Total Amount</label>
             </div>
             <div class="input-field col s3">
-                <input type="text" placeholder="Grams" id="item-per-amount">
-                <label for="item-per-amount">Serving Size</label>
-              </div>
-            <div class="input-field col s3">
-              <input type="text" placeholder="Grams" id="item-protein">
-              <label for="item-protein">Protein/serving</label>
+              <input type="number" placeholder="Grams" id="item-serving-size-input">
+              <label for="item-serving-size">Serving Size</label>
             </div>
+
             <div class="input-field col s3">
-              <input type="text" placeholder="Grams" id="item-fat">
+              <input type="number" placeholder="Grams" id="item-fat-input">
               <label for="item-fat">Fat/serving</label>
             </div>
             <div class="input-field col s3">
-              <input type="text" placeholder="Grams" id="item-carbs">
+              <input type="number" placeholder="Grams" id="item-carbs-input">
               <label for="item-carbs">Carbs/serving</label>
+            </div>
+            <div class="input-field col s3">
+              <input type="number" placeholder="Grams" id="item-protein-input">
+              <label for="item-protein">Protein/serving</label>
             </div>
 
 
-            <button class="add-btn btn blue">
+            <button id="add-item-button" class="add-btn btn blue">
               <i class="fa fa-plus"></i> Add Meal</button>
             <!--             
             <button class="update-btn btn orange"><i class="fa fa-pencil-square-o"></i> Update Meal</button>
@@ -180,11 +181,11 @@
             </span>
           </td>
           <td>
-              <span class="display-flex vertical protein">
-                <span class="item total-protein">90</span>
-                <span class="item price-per-gram-protein">.50</span>
-              </span>
-            </td>
+            <span class="display-flex vertical protein">
+              <span class="item total-protein">90</span>
+              <span class="item price-per-gram-protein">.50</span>
+            </span>
+          </td>
           <td>
             <span class="display-flex vertical calories">
               <span class="item total-calories">890</span>
