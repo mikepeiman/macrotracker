@@ -135,33 +135,111 @@
       </li>
 
     </ul> -->
-    <div class="container center">
+    <div class="container center section">
       <a href="#" class="clear-btn btn orange darken-3">Clear All Data</a>
+      <div class="row section">
+        <div class="card">
+          <span class="card-title">
+            <strong>Totals</strong>
+          </span>
+          <div class="row">
+            <div class="col s12">
+              <p>Calculate Meals By:</p>
+              <div class="input-field col s12">
+                <p>
+                  <label>
+                    <input id="calories-radio" name="calories-select" type="radio" />
+                    <span>Calories</span>
+                  </label>
+                  <label>
+                    <input id="protein-radio" name="protein-select" type="radio" checked />
+                    <span>Protein</span>
+                  </label>
+                </p>
+
+              </div>
+              <div class="input-field col s6 push-s3">
+                <form id="meals-by-calories-form">
+                  <input type="text" placeholder="Calories" id="calculate-meals-by-calories">
+                  <label for="calculate-meals-by-calories">Calories</label>
+                </form>
+                <form id="meals-by-protein-form">
+                  <input type="text" placeholder="Grams" id="calculate-meals-by-protein">
+                  <label for="calculate-meals-by-calories">Protein</label>
+                </form>
+              </div>
+            </div>
+            <div class="col s6 left-align">
+              <span class="card-title">Total Amounts</span>
+            </div>
+            <div class="col s6 left-align">
+              <span class="card-title">Average Prices</span>
+            </div>
+            <div class="col s4 left-align">
+              <ul>
+                <li>Total Protein</li>
+                <li>Total Fat</li>
+                <li>Total Carbs</li>
+                <li>Total Calories</li>
+                <li>Total Meals</li>
+                <li>Cost Per Meal</li>
+              </ul>
+            </div>
+            <div class="col s2 left-align">
+              <ul>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+              </ul>
+            </div>
+            <div class="col s4 left-align">
+              <ul>
+                <li>Price Per g Protein: </li>
+                <li>Price Per g Protein: </li>
+                <li>Price Per g Protein: </li>
+                <li>Price Per Calorie: </li>
+              </ul>
+            </div>
+            <div class="col s2 left-align">
+              <ul>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+                <li>0</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table id="items-table">
+        <thead>
+          <tr>
+            <th>Meal/Grocery Item</th>
+            <th>Amount & Price</th>
+            <th>Fat</th>
+            <th>Carbs</th>
+            <th>Protein</th>
+            <th>Calories</th>
+          </tr>
+        </thead>
+
+        <tbody id="items-list">
+        </tbody>
+      </table>
     </div>
-    <table id="items-table">
-      <thead>
-        <tr>
-          <th>Meal/Grocery Item</th>
-          <th>Amount & Price</th>
-          <th>Fat</th>
-          <th>Carbs</th>
-          <th>Protein</th>
-          <th>Calories</th>
-        </tr>
-      </thead>
-
-      <tbody id="items-list">
-      </tbody>
-    </table>
-  </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
