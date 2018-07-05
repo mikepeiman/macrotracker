@@ -57,42 +57,42 @@ const ItemCtrl = (function () {
   // Data structure / State
   const data = {
     items: [
-      {
-        id: 0,
-        name: 'Cashews',
-        price: 18.99,
-        brand: 'Dan-D-Pack',
-        source: 'Loblaws',
-        amount: 900,
-        protein: 7,
-        fat: 19,
-        carbs: 12,
-        servingSize: 40
-      },
-      {
-        id: 1,
-        name: 'Protein Powder',
-        price: 49.99,
-        brand: 'Garden Of Life',
-        source: 'Body Energy Club',
-        amount: 969,
-        protein: 20,
-        fat: 1.5,
-        carbs: 8,
-        servingSize: 35
-      },
-      {
-        id: 2,
-        name: 'Dark Chocolate, 85%',
-        price: 2.69,
-        brand: 'President\'s Choice',
-        source: 'Save-On-Foods',
-        amount: 100,
-        protein: 4,
-        fat: 19,
-        carbs: 15,
-        servingSize: 40
-      },
+      // {
+      //   id: 0,
+      //   name: 'Cashews',
+      //   price: 18.99,
+      //   brand: 'Dan-D-Pack',
+      //   source: 'Loblaws',
+      //   amount: 900,
+      //   protein: 7,
+      //   fat: 19,
+      //   carbs: 12,
+      //   servingSize: 40
+      // },
+      // {
+      //   id: 1,
+      //   name: 'Protein Powder',
+      //   price: 49.99,
+      //   brand: 'Garden Of Life',
+      //   source: 'Body Energy Club',
+      //   amount: 969,
+      //   protein: 20,
+      //   fat: 1.5,
+      //   carbs: 8,
+      //   servingSize: 35
+      // },
+      // {
+      //   id: 2,
+      //   name: 'Dark Chocolate, 85%',
+      //   price: 2.69,
+      //   brand: 'President\'s Choice',
+      //   source: 'Save-On-Foods',
+      //   amount: 100,
+      //   protein: 4,
+      //   fat: 19,
+      //   carbs: 15,
+      //   servingSize: 40
+      // }
     ],
     currentItem: null, // this is intended for updates
     totalCalories: 0
@@ -151,6 +151,7 @@ const UICtrl = (function () {
   // allowing for a more robust/scalable app. Easier updates if HTML markup is changed
   const UISelectors = {
     itemList: '#items-list',
+    itemTable: '#items-table',
     addItem: '#add-item-button',
     itemNameInput: '#item-name-input',
     itemBrandInput: '#item-brand-input',
@@ -301,6 +302,12 @@ const UICtrl = (function () {
         document.querySelector(UISelectors.itemFatInput).value = '',
         document.querySelector(UISelectors.itemCarbsInput).value = '',
         document.querySelector(UISelectors.itemServingSizeInput).value = ''
+    },
+    hideTable: function () {
+      document.querySelector(UISelectors.itemTable).style.display = 'none'
+    },
+    showTable: function () {
+      document.querySelector(UISelectors.itemTable).style.display = 'table'
     }
   }
 
@@ -354,6 +361,7 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       )
 
       UICtrl.addItemToUI(newItem)
+      UICtrl.showTable()
 
       // clear input fields
       UICtrl.clearInputFields()
@@ -376,10 +384,17 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
       // fetch items from data store
       const items = ItemCtrl.getItems()
+
+      // check if any items
+      if (items.length === 0) {
+        UICtrl.hideTable()
+      } else {
+        // populate table with item data
+        UICtrl.populateItemList(newItems)
+      }
       const newItems = ItemCtrl.calculateNewItems(items)
 
-      // populate table with item data
-      UICtrl.populateItemList(newItems)
+      // load event listeners
       loadEventListeners()
     }
   }
