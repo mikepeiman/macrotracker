@@ -43,15 +43,15 @@ const ItemCtrl = (function() {
     this.fat = fat
     this.carbs = carbs
     this.per = per
-    this.servings = Math.round((amount / per)*100)/100
-    this.totalProtein = Math.round((protein * this.servings)*100)/100
-    this.totalCarbs = Math.round((carbs * this.servings)*100)/100
-    this.totalFat = Math.round((fat * this.servings)*100)/100
-    this.pricePerFat = Math.round((price / this.totalFat)*100)/100
-    this.pricePerCarbs = Math.round((price / this.totalCarbs)*100)/100
-    this.pricePerProtein = Math.round((price / this.totalProtein)*100)/100
-    this.totalCalories = Math.round(((this.protein + this.carbs) * 4 + (this.fat * 9))*100)/100
-    this.pricePerCalorie = Math.round((price / this.totalCalories)*100)/100
+    this.servings = Math.round((this.amount / this.per)*100)/100
+    this.totalProtein = Math.round((this.amount / this.per * this.protein)*100)/100
+    this.totalCarbs = Math.round((this.carbs * this.servings)*100)/100
+    this.totalFat = Math.round((this.fat * this.servings)*100)/100
+    this.pricePerFat =(this.price / this.totalFat).toFixed(2)
+    this.pricePerCarbs =(this.price / this.totalCarbs).toFixed(2)
+    this.pricePerProtein =(this.price / this.totalProtein).toFixed(2)
+    this.totalCalories = Math.round(((this.totalProtein + this.totalCarbs) * 4) + (this.totalFat * 9)*100)/100
+    this.pricePerCalorie =(this.price / this.totalCalories).toFixed(3)
   }
 
   // Data structure / State
@@ -133,42 +133,42 @@ const UICtrl = (function() {
         html += `
       <tr class="food-item" id="item-${item.id}">
         <td>
-          <span class="table-item">
+          <span class="display-flex">
             <span class="item-name-data em">${item.name}</span>
           </span>
-          <span class="table-item">
-            <span class="item item-brand-data">${item.brand}</span>
-            <span class="spacer-1">,</span>
+          <span class="display-inline-block">
+            <span class="item item-brand-data">${item.brand}</span>,
             <span class="item item-source-data">${item.source}</span>
           </span>
-          <span class="table-item">
-            <span class="item item-amount-data">${item.amount}</span>
-            <span class="spacer-2">@</span>
+        </td>
+        <td>
+          <span class="display-flex vertical">
+            <span class="item item-amount-data">${item.amount}g</span>
             <span class="item item-price-data">$${item.price}</span>
           </span>
         </td>
         <td>
-          <span class="table-item vertical fat">
-            <span class="item total-fat">${item.totalFat}</span>
-            <span class="item price-per-gram-fat">${item.pricePerFat}</span>
+          <span class="display-flex vertical fat">
+            <span class="item total-fat">${item.totalFat}g</span>
+            <span class="item price-per-gram-fat">$${item.pricePerFat}</span>
           </span>
         </td>
         <td>
-          <span class="table-item vertical carbs">
-            <span class="item total-carbs">${item.totalCarbs}</span>
-            <span class="item price-per-gram-carbs">${item.pricePerCarbs}</span>
+          <span class="display-flex vertical carbs">
+            <span class="item total-carbs">${item.totalCarbs}g</span>
+            <span class="item price-per-gram-carbs">$${item.pricePerCarbs}</span>
           </span>
         </td>
         <td>
-            <span class="table-item vertical protein">
-              <span class="item total-protein">${item.totalProtein}</span>
-              <span class="item price-per-gram-protein">${item.pricePerProtein}</span>
+            <span class="display-flex vertical protein">
+              <span class="item total-protein">${item.totalProtein}g</span>
+              <span class="item price-per-gram-protein">$${item.pricePerProtein}</span>
             </span>
           </td>
         <td>
-          <span class="table-item vertical calories">
+          <span class="display-flex vertical calories">
             <span class="item total-calories">${item.totalCalories}</span>
-            <span class="item price-per-gram-calories">${item.pricePerCalorie}</span>
+            <span class="item price-per-gram-calories">$${item.pricePerCalorie}</span>
           </span>
         </td>
         <td>

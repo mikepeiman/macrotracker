@@ -5,8 +5,11 @@
 #brand-logo {
   padding: 0 10px;
 }
-.table-item {
+.display-flex {
   display: flex;
+}
+.display-inline-block {
+  display: inline-block;
 }
 .spacer-1 {
   margin: 0 5px 0 0;
