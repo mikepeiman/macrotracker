@@ -57,45 +57,46 @@ const ItemCtrl = (function () {
   // Data structure / State
   const data = {
     items: [
-      // {
-      //   id: 0,
-      //   name: 'Cashews',
-      //   price: 18.99,
-      //   brand: 'Dan-D-Pack',
-      //   source: 'Loblaws',
-      //   amount: 900,
-      //   protein: 7,
-      //   fat: 19,
-      //   carbs: 12,
-      //   servingSize: 40
-      // },
-      // {
-      //   id: 1,
-      //   name: 'Protein Powder',
-      //   price: 49.99,
-      //   brand: 'Garden Of Life',
-      //   source: 'Body Energy Club',
-      //   amount: 969,
-      //   protein: 20,
-      //   fat: 1.5,
-      //   carbs: 8,
-      //   servingSize: 35
-      // },
-      // {
-      //   id: 2,
-      //   name: 'Dark Chocolate, 85%',
-      //   price: 2.69,
-      //   brand: 'President\'s Choice',
-      //   source: 'Save-On-Foods',
-      //   amount: 100,
-      //   protein: 4,
-      //   fat: 19,
-      //   carbs: 15,
-      //   servingSize: 40
-      // }
+      {
+        id: 0,
+        name: 'Cashews',
+        price: 18.99,
+        brand: 'Dan-D-Pack',
+        source: 'Loblaws',
+        amount: 900,
+        protein: 7,
+        fat: 19,
+        carbs: 12,
+        servingSize: 40
+      },
+      {
+        id: 1,
+        name: 'Protein Powder',
+        price: 49.99,
+        brand: 'Garden Of Life',
+        source: 'Body Energy Club',
+        amount: 969,
+        protein: 20,
+        fat: 1.5,
+        carbs: 8,
+        servingSize: 35
+      },
+      {
+        id: 2,
+        name: 'Dark Chocolate, 85%',
+        price: 2.69,
+        brand: 'President\'s Choice',
+        source: 'Save-On-Foods',
+        amount: 100,
+        protein: 4,
+        fat: 19,
+        carbs: 15,
+        servingSize: 40
+      }
     ],
     currentItem: null, // this is intended for updates
-    totalCalories: 0
+    totalCalories: 0,
+    totalProteinSum: 0
   }
 
   // public methods
@@ -136,6 +137,37 @@ const ItemCtrl = (function () {
       data.items.push(newItem)
       // return the item so we can pass it to UI controller
       return newItem
+    },
+    getTotals: function () {
+
+      // loop throguh items and sum values
+      data.items.forEach(function (item) {
+        // totalProtein += totalProtein
+      })
+
+
+      // return data
+      return {
+        totalProtein,
+      }
+    },
+    getProteinTotal: function () {
+      let totalProteinSum = 0
+      
+      // fetch items from data store
+      const items = ItemCtrl.getItems()
+      // expand items with additional computed properties
+      const newItems = ItemCtrl.calculateNewItems(items)
+
+      // loop throuh items and sum values
+      newItems.forEach(function (item) {
+        // console.log(item.totalProtein)
+        totalProteinSum += item.totalProtein
+      })
+      // set total protein value in data set
+      data.totalProteinSum = totalProteinSum
+
+      return data.totalProteinSum
     }
   }
 })()
@@ -170,8 +202,21 @@ const UICtrl = (function () {
     itemServingSizeInput: '#item-serving-size-input',
     itemProteinInput: '#item-protein-input',
     itemCarbsInput: '#item-carbs-input',
-    itemFatInput: '#item-fat-input'
+    itemFatInput: '#item-fat-input',
+    UITotalFat: '#li-total-fat',
+    UITotalCarbs: '#li-total-carbs',
+    UITotalProtein: '#li-total-protein',
+    UITotalCalories: '#li-total-calories',
+    UITotalMeals: '#li-total-meals',
+    UICostPerMeal: '#li-cost-per-meal',
+    UIPricePerFatAvg: '#li-price-per-fat-avg',
+    UIPricePerCarbAvg: '#li-price-per-carb-avg',
+    UIPricePerProteinAvg: '#li-price-per-protein-avg',
+    UIPricePerCalorieAvg: '#li-price-per-calorie-avg',
   }
+
+  let totalProtein
+
 
 
   // public methods
@@ -330,18 +375,33 @@ const UICtrl = (function () {
       document.querySelector(UISelectors.caloriesRadio).checked = false
       document.querySelector(UISelectors.proteinRadio).checked = true
     },
-    setMealsByProtein: function() {
-      let protein = document.querySelector(UISelectors.calculateMealsByProtein)
-      if(protein.value !== '') {
-        document.querySelector(UISelectors.mealsByProteinButton).textContent = `${protein.value} grams/meal`
+    setMealsByProtein: function () {
+      let input = document.querySelector(UISelectors.calculateMealsByProtein)
+      if (input.value !== '') {
+        document.querySelector(UISelectors.mealsByProteinButton).textContent = `${input.value} grams/meal`
         setTimeout(() => {
-          protein.value = ''
+          input.value = ''
         }, 1250);
       }
-
+    },
+    setMealsByCalories: function () {
+      let input = document.querySelector(UISelectors.calculateMealsByCalories)
+      if (input.value !== '') {
+        document.querySelector(UISelectors.mealsByProteinButton).textContent = `${input.value} grams/meal`
+        setTimeout(() => {
+          input.value = ''
+        }, 1250);
       }
+    },
+    showTotals: function (totals) {
+      console.log(totals)
+    },
+    showProteinTotal: function (totalProteinSum) {
+      console.log(totalProteinSum)
+      document.querySelector(UISelectors.UITotalProtein).textContent = totalProteinSum
     }
   }
+}
 )()
 
 // ===============================================================
@@ -359,19 +419,19 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     // Add item event
     document.querySelector(UISelectors.addItem).addEventListener('click', itemAddSubmit)
-    
+
     // set event listener for "Show meals by" radio select
-    document.querySelector(UISelectors.proteinRadio).addEventListener('click', function() {
-             UICtrl.showMealsByProtein()
+    document.querySelector(UISelectors.proteinRadio).addEventListener('click', function () {
+      UICtrl.showMealsByProtein()
     })
-    document.querySelector(UISelectors.caloriesRadio).addEventListener('click', function() {
+    document.querySelector(UISelectors.caloriesRadio).addEventListener('click', function () {
       UICtrl.showMealsByCalories()
     })
-    document.querySelector(UISelectors.mealsByProteinButton).addEventListener('click', function() {
+    document.querySelector(UISelectors.mealsByProteinButton).addEventListener('click', function () {
       UICtrl.setMealsByProtein()
     })
-    document.querySelector(UISelectors.calculateMealsByProtein).addEventListener('keyup', function() {
-      UICtrl.setMealsByProtein()
+    document.querySelector(UISelectors.mealsByCaloriesButton).addEventListener('click', function () {
+      UICtrl.setMealsByCalories()
     })
 
   }
@@ -421,6 +481,12 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     e.preventDefault();
 
   }
+        // get all totals
+        // const totals = ItemCtrl.getTotals()
+        const totalProteinSum = ItemCtrl.getProteinTotal()
+        // add all totals to UI
+        // UICtrl.showTotals(totals)
+        UICtrl.showProteinTotal(totalProteinSum)
 
 
   // public methods
@@ -430,6 +496,8 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
       // fetch items from data store
       const items = ItemCtrl.getItems()
+      // expand items with additional computed properties
+      const newItems = ItemCtrl.calculateNewItems(items)
 
       // check if any items
       if (items.length === 0) {
@@ -438,11 +506,11 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
         // populate table with item data
         UICtrl.populateItemList(newItems)
       }
-      const newItems = ItemCtrl.calculateNewItems(items)
-      
+
+
       // hide the "calculate meals by calories" form as "by protein" is checked by default
       UICtrl.showMealsByProtein()
-      
+
       // load event listeners
       loadEventListeners()
     }
