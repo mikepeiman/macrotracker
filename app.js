@@ -153,6 +153,7 @@ const UICtrl = (function () {
     itemList: '#items-list',
     itemTable: '#items-table',
     addItem: '#add-item-button',
+    calculateMealsBy: '#calculate-meals-by',
     calculateMealsByCalories: '#calculate-meals-by-calories',
     calculateMealsByProtein: '#calculate-meals-by-protein',
     mealsByCaloriesForm: '#meals-by-calories-form',
@@ -315,21 +316,17 @@ const UICtrl = (function () {
     showTable: function () {
       document.querySelector(UISelectors.itemTable).style.display = 'table'
     },
-    hideMealsByCalories: function () {
-      document.querySelector(UISelectors.mealsByCaloriesForm).style.display = 'none'
-      document.querySelector(UISelectors.caloriesRadio).checked = false
-    },
-    hideMealsByProtein: function () {
-      document.querySelector(UISelectors.mealsByProteinForm).style.display = 'none'
-      document.querySelector(UISelectors.proteinRadio).checked = false
-    },
     showMealsByCalories: function () {
       document.querySelector(UISelectors.mealsByCaloriesForm).style.display = 'block'
+      document.querySelector(UISelectors.mealsByProteinForm).style.display = 'none'
       document.querySelector(UISelectors.proteinRadio).checked = false
+      document.querySelector(UISelectors.caloriesRadio).checked = true
     },
     showMealsByProtein: function () {
       document.querySelector(UISelectors.mealsByProteinForm).style.display = 'block'
+      document.querySelector(UISelectors.mealsByCaloriesForm).style.display = 'none'
       document.querySelector(UISelectors.caloriesRadio).checked = false
+      document.querySelector(UISelectors.proteinRadio).checked = true
     }
   }
 
@@ -351,11 +348,14 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     // Add item event
     document.querySelector(UISelectors.addItem).addEventListener('click', itemAddSubmit)
     
-    if(document.querySelector(UISelectors.proteinRadio).checked === true) {
-      UICtrl.showMealsByProtein()
-    } else {
+    // set event listener for "Show meals by" radio select
+    document.querySelector(UISelectors.proteinRadio).addEventListener('click', function() {
+             UICtrl.showMealsByProtein()
+    })
+    document.querySelector(UISelectors.caloriesRadio).addEventListener('click', function() {
       UICtrl.showMealsByCalories()
-    }
+    })
+
   }
 
   // Add item submit
@@ -423,7 +423,7 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       const newItems = ItemCtrl.calculateNewItems(items)
       
       // hide the "calculate meals by calories" form as "by protein" is checked by default
-      UICtrl.hideMealsByCalories()
+      UICtrl.showMealsByProtein()
       
       // load event listeners
       loadEventListeners()

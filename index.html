@@ -152,19 +152,21 @@
                     <span>Calories</span>
                   </label>
                   <label>
-                    <input id="protein-radio" name="protein-select" type="radio" checked />
+                    <input id="protein-radio" name="protein-select" type="radio" />
                     <span>Protein</span>
                   </label>
                 </p>
 
               </div>
-              <div class="input-field col s6 push-s3">
+              <div id="calculate-meals-by" class="input-field col s6 push-s3">
                 <form id="meals-by-calories-form">
-                  <input type="text" placeholder="Calories" id="calculate-meals-by-calories">
+                  <p>Enter the number of calories which should define a meal:</p>
+                  <input type="number" placeholder="Calories" id="calculate-meals-by-calories">
                   <label for="calculate-meals-by-calories">Calories</label>
                 </form>
                 <form id="meals-by-protein-form">
-                  <input type="text" placeholder="Grams" id="calculate-meals-by-protein">
+                    <p>Enter the grams of protein which should define a meal:</p>
+                  <input type="number" placeholder="Grams" id="calculate-meals-by-protein">
                   <label for="calculate-meals-by-calories">Protein</label>
                 </form>
               </div>
