@@ -158,16 +158,20 @@
                 </p>
 
               </div>
-              <div id="calculate-meals-by" class="input-field col s6 push-s3">
+              <div id="calculate-meals-by" class="input-field col s10 push-s1">
                 <form id="meals-by-calories-form">
                   <p>Enter the number of calories which should define a meal:</p>
-                  <input type="number" placeholder="Calories" id="calculate-meals-by-calories">
-                  <label for="calculate-meals-by-calories">Calories</label>
+                  <input type="number" placeholder="Calories" id="calculate-meals-by-calories" class="col s6">
+                  <button id="set-calories-per-meal-button" class="add-btn btn col s6">
+                    <label for="calculate-meals-by-calories" class="white-text ">Set Cals</label>
+                  </button>
                 </form>
                 <form id="meals-by-protein-form">
-                    <p>Enter the grams of protein which should define a meal:</p>
-                  <input type="number" placeholder="Grams" id="calculate-meals-by-protein">
-                  <label for="calculate-meals-by-calories">Protein</label>
+                  <p>Enter the grams of protein which should define a meal:</p>
+                  <input type="number" placeholder="Grams" id="calculate-meals-by-protein" class="col s6">
+                  <button id="set-protein-per-meal-button" class="add-btn btn col s6">
+                    <label for="calculate-meals-by-protein" class="white-text">Set Protein</label>
+                  </button>
                 </form>
               </div>
             </div>

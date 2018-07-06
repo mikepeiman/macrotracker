@@ -156,6 +156,8 @@ const UICtrl = (function () {
     calculateMealsBy: '#calculate-meals-by',
     calculateMealsByCalories: '#calculate-meals-by-calories',
     calculateMealsByProtein: '#calculate-meals-by-protein',
+    mealsByProteinButton: '#set-protein-per-meal-button',
+    mealsByCaloriesButton: '#set-calories-per-meal-button',
     mealsByCaloriesForm: '#meals-by-calories-form',
     mealsByProteinForm: '#meals-by-protein-form',
     caloriesRadio: '#calories-radio',
@@ -327,10 +329,20 @@ const UICtrl = (function () {
       document.querySelector(UISelectors.mealsByCaloriesForm).style.display = 'none'
       document.querySelector(UISelectors.caloriesRadio).checked = false
       document.querySelector(UISelectors.proteinRadio).checked = true
+    },
+    setMealsByProtein: function() {
+      let protein = document.querySelector(UISelectors.calculateMealsByProtein)
+      if(protein.value !== '') {
+        document.querySelector(UISelectors.mealsByProteinButton).textContent = `${protein.value} grams/meal`
+        setTimeout(() => {
+          protein.value = ''
+        }, 1250);
+      }
+
+      }
     }
   }
-
-})()
+)()
 
 // ===============================================================
 // ===============================================================
@@ -354,6 +366,12 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     })
     document.querySelector(UISelectors.caloriesRadio).addEventListener('click', function() {
       UICtrl.showMealsByCalories()
+    })
+    document.querySelector(UISelectors.mealsByProteinButton).addEventListener('click', function() {
+      UICtrl.setMealsByProtein()
+    })
+    document.querySelector(UISelectors.calculateMealsByProtein).addEventListener('keyup', function() {
+      UICtrl.setMealsByProtein()
     })
 
   }
