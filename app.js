@@ -52,18 +52,6 @@ const ItemCtrl = (function () {
     this.pricePerProtein = (this.price / this.totalProtein).toFixed(2)
     this.totalCalories = Math.round(((this.totalProtein + this.totalCarbs) * 4) + (this.totalFat * 9) * 100) / 100
     this.pricePerCalorie = (this.price / this.totalCalories).toFixed(3)
-    // this.totalFatSum = 0
-    // this.totalCarbsSum = 0
-    // this.totalProteinSum = 0
-    // this.totalCaloriesSum = 0
-    // this.totalMealsSum = 0
-    // // this.caloriesPerMeal = 800
-    // // this.proteinPerMeal = 35
-    // this.avgCostPerMeal = 0
-    // this.avgPricePerFat = 0
-    // this.avgPricePerCarb = 0
-    // this.avgPricePerProtein = 0
-    // this.avgPricePerCalorie = 0
   }
 
   // Data structure / State
@@ -111,6 +99,7 @@ const ItemCtrl = (function () {
     totalFatSum: 0,
     totalCarbsSum: 0,
     totalCaloriesSum: 0,
+    totalCostSum: 0,
     totalMealsSum: 0,
     avgCostPerMeal: 0,
     avgPricePerFat: 0,
@@ -129,6 +118,8 @@ const ItemCtrl = (function () {
       return data.items
     },
     getData: function () {
+      const totals = ItemCtrl.getTotals()
+      const mealsCalc = ItemCtrl.calculateMeals(totals)
       return data
     },
     calculateNewItems: function () {
@@ -142,7 +133,6 @@ const ItemCtrl = (function () {
       return newItems
     },
     addItem: function (name, price, brand, source, amount, protein, fat, carbs, servingSize) {
-      // console.log(name, price, brand, source, amount, protein, fat, carbs, servingSize)
 
       // create unique ID per item
       let ID
@@ -181,105 +171,57 @@ const ItemCtrl = (function () {
       let totalCaloriesSum = 0
       let totalCostSum = 0
       
-      // let caloriesPerMeal = 890
-      // let proteinPerMeal = (UICtrl.proteinPerMeal() !== 0) ? UICtrl.proteinPerMeal() : 10
-      // let totalMealsSum = totalProteinSum / proteinPerMeal//(totalProteinSum / proteinPerMeal).toFixed(2) 
-      // let avgCostPerMeal = 0
-      // let avgPricePerFat = 0
-      // let avgPricePerCarb = 0
-      // let avgPricePerProtein = 0
-      // let avgPricePerCalorie = 0
-
       // fetch items from data store
       const items = ItemCtrl.getItems()
       // expand items with additional computed properties
       const newItems = ItemCtrl.calculateNewItems(items)
 
-      // let proteinInput = document.querySelector('#calculate-meals-by-protein')
-      // let caloriesInput = document.querySelector('#calculate-meals-by-calories')
-      // let proteinRadio = document.querySelector('#protein-radio')
-      // let caloriesRadio = document.querySelector('#calories-radio')
-
-
       // loop through items and calculate values
       newItems.forEach(function (item) {
-
         totalProteinSum += item.totalProtein
         totalFatSum += item.totalFat
         totalCarbsSum += item.totalCarbs
         totalCaloriesSum += item.totalCalories
         totalCostSum += item.price
-        // proteinPerMeal = 1//(UICtrl.proteinPerMeal() !== 0) ? UICtrl.proteinPerMeal() : 30
-        // another way to do totalMealsSum is to calculate total meals per item and sum it in this loop
-
-        // totalMealsSum = (totalProteinSum / proteinPerMeal).toFixed(2)  
-        // totalMealsSum = totalProteinSum / data.proteinPerMeal
-        // console.log(`Protein per meal: ${proteinPerMeal}, total protein across items: ${totalProteinSum}`)
-        // avgCostPerMeal = 10
-        // avgPricePerFat = 5
-        // avgPricePerCarb = 6
-        // avgPricePerProtein = 7
-        // avgPricePerCalorie = 8
-        // if (proteinRadio.checked) {
-        //   totalMealsSum = totalProteinSum / proteinPerMeal
-        //   console.log(`Total meals sum, proteinRadio: ${totalMealsSum}`)
-        // } else if(caloriesRadio.checked) {
-        //   totalMealsSum = totalCaloriesSum / caloriesPerMeal
-        //   console.log(`Total meals sum, caloriesRadio: ${totalMealsSum}`)
-        // }
       })
       // set totals values in data set
-      
-      // data.proteinPerMeal = totalProteinSum / proteinPerMeal // (UICtrl.proteinPerMeal() !== 0) ? UICtrl.proteinPerMeal() : 30
       data.totalProteinSum = totalProteinSum
       data.totalFatSum = totalFatSum
       data.totalCarbsSum = totalCarbsSum
       data.totalCaloriesSum = totalCaloriesSum
-      // data.proteinPerMeal = proteinPerMeal
-      // data.caloriesPerMeal = caloriesPerMeal
-      // data.totalMealsSum = totalMealsSum
-      // data.totalMealsSum = totalProteinSum / proteinPerMeal
-      // data.totalMealsSum = totalCaloriesSum / caloriesPerMeal
-      // data.avgCostPerMeal = avgCostPerMeal
-      // data.avgPricePerFat = avgPricePerFat
-      // data.avgPricePerCarb = avgPricePerCarb
-      // data.avgPricePerProtein = avgPricePerProtein
-      // data.avgPricePerCalorie = avgPricePerCalorie
-
+      data.totalCostSum = totalCostSum
 
       return {
         totalProteinSum,
         totalFatSum,
         totalCarbsSum,
         totalCaloriesSum,
-        // avgPricePerFat,
-        // avgPricePerCarb,
-        // avgPricePerProtein,
-        // avgPricePerCalorie,
-        // proteinPerMeal,
-        // caloriesPerMeal,
         totalCostSum
       }
     },
     calculateMeals: function(totals) {
+      
       // const totals = ItemCtrl.getTotals()
-      let proteinPerMeal = (UICtrl.proteinPerMeal() !== 0) ? UICtrl.proteinPerMeal() : 30
-      let totalMealsSum = (totals.totalProteinSum / proteinPerMeal).toFixed(2)
-      let avgCostPerMeal = (totals.totalCostSum / totalMealsSum).toFixed(2)
+      // const mealStats = UICtrl.proteinPerMeal()
+      // let proteinPerMeal = (mealStats.ppm !== 0) ? mealStats.ppm : 30
+      // console.log(`ItemCtrl.calculateMeals.proteinPerMeal: ${mealStats.ppm}, UICtrl.proteinPerMeal: ${mealStats.tms} `)
+      // let totalMealsSum = (totals.totalProteinSum / data.proteinPerMeal).toFixed(2)
+      let avgCostPerMeal = (totals.totalCostSum / data.totalMealsSum).toFixed(2)
       let avgPricePerCalorie = (totals.totalCostSum / totals.totalCaloriesSum).toFixed(2)
       let avgPricePerCarb = (totals.totalCostSum / totals.totalCarbsSum).toFixed(2)
       let avgPricePerFat = (totals.totalCostSum / totals.totalFatSum).toFixed(2)
       let avgPricePerProtein = (totals.totalCostSum / totals.totalProteinSum).toFixed(2)
 
 
-      data.totalMealsSum = totalMealsSum,
+      // data.totalMealsSum = totalMealsSum,
+      // data.proteinPerMeal = proteinPerMeal,
       data.avgCostPerMeal = avgCostPerMeal,
-      data.avgPricePerCalorie =avgPricePerCalorie,
+      data.avgPricePerCalorie = avgPricePerCalorie,
       data.avgPricePerCarb = avgPricePerCarb,
       data.avgPricePerFat = avgPricePerFat,
       data.avgPricePerProtein = avgPricePerProtein
       return {
-        totalMealsSum,
+        // totalMealsSum,
         avgCostPerMeal,
         avgPricePerCalorie,
         avgPricePerCarb,
@@ -490,32 +432,43 @@ const UICtrl = (function () {
     proteinPerMeal: function () {
       let input = document.querySelector(UISelectors.calculateMealsByProtein)
       let data = ItemCtrl.getData()
-      // let mealCalc = ItemCtrl.calculateMeals()
-     
+      let ppm = parseInt(data.proteinPerMeal)
+      let tms
+      // console.log(`tms: ${tms}`)
       
       if (input.value !== '') {
+        data.proteinPerMeal = input.value
+        data.totalMealsSum = (data.totalProteinSum / data.proteinPerMeal).toFixed(2)
         document.querySelector(UISelectors.mealsByProteinButton).textContent = `${input.value} grams/meal`
         setTimeout(() => {
-          data.proteinPerMeal = input.value
-          console.log(`proteinPerMeal(): Protein input: ${input.value}, data.proteinPerMeal: ${data.proteinPerMeal}`)
-          console.log(`data.totalProteinSum: ${data.totalProteinSum}, data.totalMealsSum: ${(data.totalProteinSum / data.proteinPerMeal).toFixed(2)}`)// 
-          // data.totalMealsSum = data.totalProteinSum / data.proteinPerMeal
-          // const totals = ItemCtrl.getTotals()
-
-          // add all totals to UI
-          // UICtrl.showTotals(totals)
+          
+          ppm = parseInt(data.proteinPerMeal)
+          console.log(`tms: ${tms}, cpm: ${cpm}`)
           input.value = ''
+          // document.querySelector(UISelectors.UITotalMeals).textContent = tms
         }, 1250);
         
       } 
-      data.totalMealsSum = (data.totalProteinSum / data.proteinPerMeal).toFixed(2)
+      // data.totalMealsSum = (data.totalProteinSum / data.proteinPerMeal).toFixed(2)
 
-      return parseInt(data.proteinPerMeal)
-      // data.totalMealsSum = data.totalProteinSum / data.proteinPerMeal
-      // else {
-      //   data.proteinPerMeal = 30
-      // }
-      // return 5 //(data.proteinPerMeal !== 0) ? data.proteinPerMeal : 50
+      totalMealsSum = (data.totalProteinSum / data.proteinPerMeal).toFixed(2)
+      avgCostPerMeal = (data.totalCostSum / totalMealsSum).toFixed(2)
+      document.querySelector(UISelectors.UITotalMeals).textContent = totalMealsSum
+      document.querySelector(UISelectors.UICostPerMeal).textContent = `$${avgCostPerMeal}`
+      tms = totalMealsSum
+      cpm = avgCostPerMeal
+      data.totalMealsSum = totalMealsSum
+      data.avgCostPerMeal = avgCostPerMeal
+      console.log(`proteinPerMeal(): Protein input: ${input.value}, data.proteinPerMeal: ${data.proteinPerMeal}`)
+      console.log(`data.totalProteinSum: ${data.totalProteinSum}, data.totalMealsSum: ${tms}`)
+      console.log(`avgCostPerMeal: ${cpm} | ${data.totalCostSum}`)
+      
+      return {
+        ppm,
+        tms, 
+        cpm
+      }
+      this.showTotals()
     },
     caloriesPerMeal: function () {
       let input = document.querySelector(UISelectors.calculateMealsByCalories)
@@ -534,13 +487,14 @@ const UICtrl = (function () {
     // showTotals: function (totals) {
     //   console.log(totals)
     // },
-    showTotals: function (totals) {
+    showTotals: function (totals, mealsCalc, ppm) {
       const data = ItemCtrl.getData()
-      // console.log(totals)
+      // const ppm = this.proteinPerMeal()
+      console.log(ppm)
       document.querySelector(UISelectors.UITotalProtein).textContent = totals.totalProteinSum
       document.querySelector(UISelectors.UITotalFat).textContent = totals.totalFatSum
       document.querySelector(UISelectors.UITotalCarbs).textContent = totals.totalCarbsSum
-      document.querySelector(UISelectors.UITotalMeals).textContent = data.totalMealsSum
+      
       document.querySelector(UISelectors.UITotalCalories).textContent = totals.totalCaloriesSum
       document.querySelector(UISelectors.UICostPerMeal).textContent = `$${data.avgCostPerMeal}`
       document.querySelector(UISelectors.UIPricePerProteinAvg).textContent = `$${data.avgPricePerProtein}`
@@ -548,6 +502,7 @@ const UICtrl = (function () {
       document.querySelector(UISelectors.UIPricePerFatAvg).textContent = `$${data.avgPricePerFat}`
       document.querySelector(UISelectors.UIPricePerCalorieAvg).textContent = `$${data.avgPricePerCalorie}`
       document.querySelector(UISelectors.UITotalCost).textContent = `$${totals.totalCostSum}`
+      
       // console.log(`
       // total meals: ${data.totalMealsSum} 
       // avg meal cost: ${data.avgCostPerMeal} 
@@ -648,16 +603,20 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
   }
   // get all totals
   const totals = ItemCtrl.getTotals()
-  ItemCtrl.calculateMeals(totals)
-  UICtrl.proteinPerMeal()
+  const mealsCalc = ItemCtrl.calculateMeals(totals)
+  let ppm = UICtrl.proteinPerMeal()
+  // let UISelectors = UICtrl.getSelectors()
+  
   // add all totals to UI
-  UICtrl.showTotals(totals)
+  setTimeout(() => {
+    UICtrl.showTotals(totals, mealsCalc, ppm)
+  }, 500);
+  
 
 
   // public methods
   return {
     init: function () {
-      // console.log('Init app')
 
       // fetch items from data store
       const items = ItemCtrl.getItems()
