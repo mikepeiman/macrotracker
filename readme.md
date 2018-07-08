@@ -11,3 +11,8 @@ Roadmap:
 - Add web scraping for particular product sets per page/view
 - Add Google Analytics
 - Integrate Amazon affiliate links
+
+UI tweaks:
+- Make "protein per meal" and "calories per meal" inline inputs with radio select inside of totals card
+- add a "quantity" field to calculate based on multiples of an item
+- refactor totals list HTML & CSS for better responsive style/alignment
