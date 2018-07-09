@@ -199,10 +199,10 @@ const ItemCtrl = (function () {
       let avgPricePerProtein = (totals.totalCostSum / totals.totalProteinSum).toFixed(2)
 
       data.avgCostPerMeal = avgCostPerMeal,
-      data.avgPricePerCalorie = avgPricePerCalorie,
-      data.avgPricePerCarb = avgPricePerCarb,
-      data.avgPricePerFat = avgPricePerFat,
-      data.avgPricePerProtein = avgPricePerProtein
+        data.avgPricePerCalorie = avgPricePerCalorie,
+        data.avgPricePerCarb = avgPricePerCarb,
+        data.avgPricePerFat = avgPricePerFat,
+        data.avgPricePerProtein = avgPricePerProtein
 
       return {
         avgCostPerMeal,
@@ -211,6 +211,36 @@ const ItemCtrl = (function () {
         avgPricePerFat,
         avgPricePerProtein
       }
+    },
+    getItemById: function (id) {
+      let found = null
+      // loop through items
+      data.items.forEach(function (item) {
+        if (item.id === id) {
+          found = item
+        }
+      })
+      return found
+    },
+    setCurrentItem: function (itemToEdit) {
+      data.currentItem = itemToEdit
+    },
+    getCurrentItem: function () {
+      return data.currentItem
+    },
+    updateItem: function (name) {
+
+      // once I add all the variables,
+      // convert number values to number via parseInt()
+
+      let found = null
+      data.items.forEach(function (item) {
+        if (item.id === data.currentItem.id) {
+          item.name = name
+          found = item
+        }
+      })
+      return found
     }
   }
 })()
@@ -227,7 +257,11 @@ const UICtrl = (function () {
   const UISelectors = {
     itemList: '#items-list',
     itemTable: '#items-table',
-    addItem: '#add-item-button',
+    tableItems: 'tr',
+    addItemButton: '#add-item-button',
+    updateItemButton: '#update-item-button',
+    deleteItemButton: '#delete-item-button',
+    backButton: '#back-button',
     calculateMealsBy: '#calculate-meals-by',
     calculateMealsByCalories: '#calculate-meals-by-calories',
     calculateMealsByProtein: '#calculate-meals-by-protein',
@@ -306,8 +340,8 @@ const UICtrl = (function () {
           </span>
         </td>
         <td>
-          <a href="#" class="secondary-content">
-            <i class="fa fa-pencil"></i>
+          <a href="#">
+            <i class="edit-item fa fa-pencil"></i>
           </a>
         </td>
       </tr>
@@ -376,12 +410,44 @@ const UICtrl = (function () {
         </span>
       </td>
       <td>
-        <a href="#" class="secondary-content">
+        <a href="#" class="edit-item">
           <i class="fa fa-pencil"></i>
         </a>
       </td>
       `
       document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', tr)
+    },
+    updateItemUI: function (item) {
+      let tableItems = document.querySelectorAll(UISelectors.tableItems)
+      // console.log(tableItems)
+
+      // turn nodelist into array
+      tableItems = Array.from(tableItems)
+
+      console.log(`array from: ${tableItems}`)
+      console.log(`item argument: ${item.id}`)
+
+      tableItems.forEach(function(tableItem) {
+        const itemID = tableItem.getAttribute('id')
+        // console.log(tableItem, itemID, tableItem.id)
+        if (itemID === `item-${item.id}`) {
+          let thisItem = document.querySelector(`#${itemID}`)
+          // console.log(`this item matches: ${thisItem}`)
+          // console.log(item.name, item.price)
+
+          thisItem.firstElementChild.innerHTML = `
+          <td>
+          <span class="display-flex">
+            <span class="item-name-data em">${item.name}</span>
+          </span>
+          <span class="display-inline-block">
+            <span class="item item-brand-data">${item.brand}</span>,
+            <span class="item item-source-data">${item.source}</span>
+          </span>
+        </td>`
+        }
+
+      })
     },
     clearInputFields: function () {
       document.querySelector(UISelectors.itemNameInput).value = '',
@@ -393,6 +459,11 @@ const UICtrl = (function () {
         document.querySelector(UISelectors.itemFatInput).value = '',
         document.querySelector(UISelectors.itemCarbsInput).value = '',
         document.querySelector(UISelectors.itemServingSizeInput).value = ''
+    },
+    addItemToForm: function () {
+      document.querySelector(UISelectors.itemNameInput).value =
+        ItemCtrl.getCurrentItem().name
+      UICtrl.showEditState()
     },
     hideTable: function () {
       document.querySelector(UISelectors.itemTable).style.display = 'none'
@@ -474,6 +545,19 @@ const UICtrl = (function () {
     },
     getSelectors: function () {
       return UISelectors
+    },
+    clearEditState: function () {
+      UICtrl.clearInputFields()
+      document.querySelector(UISelectors.updateItemButton).style.display = 'none'
+      document.querySelector(UISelectors.deleteItemButton).style.display = 'none'
+      document.querySelector(UISelectors.backButton).style.display = 'none'
+      document.querySelector(UISelectors.addItemButton).style.display = 'inline'
+    },
+    showEditState: function () {
+      document.querySelector(UISelectors.updateItemButton).style.display = 'inline'
+      document.querySelector(UISelectors.deleteItemButton).style.display = 'inline'
+      document.querySelector(UISelectors.backButton).style.display = 'inline'
+      document.querySelector(UISelectors.addItemButton).style.display = 'none'
     }
   }
 }
@@ -493,7 +577,15 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     const UISelectors = UICtrl.getSelectors()
 
     // Add item event
-    document.querySelector(UISelectors.addItem).addEventListener('click', itemAddSubmit)
+    document.querySelector(UISelectors.addItemButton).addEventListener('click', itemAddSubmit)
+
+    // disable <enter> keypress
+    document.addEventListener('keypress', function (e) {
+      if (e.keyCode === 13 || e.which === 13) {
+        e.preventDefault()
+        return false
+      }
+    })
 
     // set event listener for "Show meals by" radio select
     document.querySelector(UISelectors.proteinRadio).addEventListener('click', function () {
@@ -515,6 +607,11 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       UICtrl.caloriesPerMeal()
     })
 
+    // edit icon click event
+    document.querySelector(UISelectors.itemList).addEventListener('click', itemEditClick)
+
+    // update item submit event
+    document.querySelector(UISelectors.updateItemButton).addEventListener('click', editItemUpdateSubmit)
   }
 
   // Add item submit
@@ -562,10 +659,60 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
   }
 
+  const itemEditClick = function (e) {
+    if (e.target.classList.contains('edit-item')) {
+      // console.log('e.target edit-item success!')
+      // Get list item ID
+      const listID = e.target.parentNode.parentNode.parentNode.id
+      console.log(e.target, listID)
+      // console.log(e.target.childNode.classList.contains('edit-item'))
+
+      // split list-id string so we can get ID
+      const idSplit = listID.split('-')
+      // console.log(idSplit[1])
+
+      // get actual ID
+      const id = parseInt(idSplit[1])
+
+      // get item
+      const itemToEdit = ItemCtrl.getItemById(id)
+      // console.log(itemToEdit)
+
+      // set current item
+      ItemCtrl.setCurrentItem(itemToEdit)
+
+      // trigger edit state in table
+      UICtrl.addItemToForm()
+    }
+    e.preventDefault
+  }
+
+  const editItemUpdateSubmit = function (e) {
+
+    // get item input
+    const input = UICtrl.getItemInput()
+
+    // update item
+    const updatedItem = ItemCtrl.updateItem(input.name)
+    // a little refresher on basic functional logic:
+    // here's my variable <updatedItem>
+    // run this function  ItemCtrl.updateItem()
+    // feed it this data (argument): ItemCtrl.updateItem(input.name)
+    // assign the value this returns to my variable
+
+    // update UI
+    UICtrl.updateItemUI(updatedItem)
+
+    e.preventDefault()
+  }
+
   // public methods
   return {
     init: function () {
-
+      // set initial buttonstate
+      UICtrl.clearEditState()
+      // hide the "calculate meals by calories" form as "by protein" is checked by default
+      UICtrl.showMealsByProtein()
       // fetch items from data store
       const items = ItemCtrl.getItems()
       // expand items with additional computed properties
@@ -580,14 +727,13 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       }
 
 
-      // hide the "calculate meals by calories" form as "by protein" is checked by default
-      UICtrl.showMealsByProtein()
       // get all totals
       const totals = ItemCtrl.getTotals()
       const mealsCalc = ItemCtrl.calculateMeals(totals)
       // add all totals to UI
       UICtrl.proteinPerMeal()
       UICtrl.showTotals(totals, mealsCalc)
+
 
       // load event listeners
       loadEventListeners()
