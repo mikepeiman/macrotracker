@@ -187,6 +187,11 @@ const ItemCtrl = (function () {
         totalCaloriesSum += item.totalCalories
         totalCostSum += item.price
       })
+
+      totalFatSum = totalFatSum.toFixed(2)
+      totalCarbsSum - totalCarbsSum.toFixed(2)
+      totalCaloriesSum = totalCaloriesSum.toFixed(2)
+      totalProteinSum = totalProteinSum.toFixed(2)
       // set totals values in data set
       data.totalProteinSum = totalProteinSum
       data.totalFatSum = totalFatSum
@@ -271,6 +276,19 @@ const ItemCtrl = (function () {
         }
       })
       return found
+    },
+    deleteItem: function(id) {
+      ids = data.items.map(function(item) {
+        return item.id
+      })
+
+      // get index
+      const index = ids.indexOf(id)
+
+      // delete from array via splice()
+      data.items.splice(index,1)
+
+      UICtrl.clearEditState()
     }
   }
 })()
@@ -449,13 +467,9 @@ const UICtrl = (function () {
     },
     updateItemUI: function (item) {
       let tableItems = document.querySelectorAll(UISelectors.tableItems)
-      // console.log(tableItems)
 
       // turn nodelist into array
       tableItems = Array.from(tableItems)
-
-      console.log(`array from: ${tableItems}`)
-      console.log(`item argument: ${item.id}`)
 
       tableItems.forEach(function (tableItem) {
         const itemID = tableItem.getAttribute('id')
@@ -515,6 +529,11 @@ const UICtrl = (function () {
         }
 
       })
+    },
+    deleteItemFromUI: function(id) {
+      const itemID = `#item-${id}`
+      const item = document.querySelector(itemID)
+      item.remove()
     },
     clearInputFields: function () {
       document.querySelector(UISelectors.itemNameInput).value = '',
@@ -691,6 +710,9 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     // back button, clear fields
     document.querySelector(UISelectors.backButton).addEventListener('click', UICtrl.clearEditState)
+
+    // delete button
+    document.querySelector(UISelectors.deleteItemButton).addEventListener('click', itemDeleteSubmit)
   }
 
   // Add item submit
@@ -811,6 +833,25 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     e.preventDefault()
   }
 
+  const itemDeleteSubmit = function(e) {
+    // get current item by ID
+    const currentItem = ItemCtrl.getCurrentItem()
+
+    // delete from data structure
+    ItemCtrl.deleteItem(currentItem.id)
+    
+    // delete from UI
+    UICtrl.deleteItemFromUI(currentItem.id)
+
+          // get all totals
+          const totals = ItemCtrl.getTotals()
+          const mealsCalc = ItemCtrl.calculateMeals(totals)
+          // add all totals to UI
+          UICtrl.proteinPerMeal()
+          UICtrl.showTotals(totals, mealsCalc)
+    e.preventDefault()
+  }
+
   // public methods
   return {
     init: function () {
@@ -830,7 +871,6 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
         // populate table with item data
         UICtrl.populateItemList(newItems)
       }
-
 
       // get all totals
       const totals = ItemCtrl.getTotals()
