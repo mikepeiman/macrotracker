@@ -132,19 +132,22 @@ const ItemCtrl = (function () {
       })
       return newItems
     },
-    addItem: function (name, price, brand, source, amount, protein, fat, carbs, servingSize) {
+    addItem: function (ID, name, price, brand, source, amount, protein, fat, carbs, servingSize) {
 
       // create unique ID per item
-      let ID
-      if (data.items.length > 0) {
-        ID = data.items[data.items.length - 1].id + 1
-        // Length of items collection (eg 3 items)
-        // Access the last item through array indexing (hence the '- 1')
-        // Access the value of that item's ID property ('.id')
-        // Add one more to create the next unique ID in sequence
-
-      } else {
-        ID = 0
+      
+      if(!ID) {
+        let ID
+        if (data.items.length > 0) {
+          ID = data.items[data.items.length - 1].id + 1
+          // Length of items collection (eg 3 items)
+          // Access the last item through array indexing (hence the '- 1')
+          // Access the value of that item's ID property ('.id')
+          // Add one more to create the next unique ID in sequence
+  
+        } else {
+          ID = 0
+        }
       }
 
       // Create new item
@@ -228,7 +231,17 @@ const ItemCtrl = (function () {
     getCurrentItem: function () {
       return data.currentItem
     },
-    updateItem: function (name) {
+    updateItem: function (
+      name,
+      price,
+      brand,
+      source,
+      amount,
+      protein,
+      fat,
+      carbs,
+      servingSize
+    ) {
 
       // once I add all the variables,
       // convert number values to number via parseInt()
@@ -237,6 +250,14 @@ const ItemCtrl = (function () {
       data.items.forEach(function (item) {
         if (item.id === data.currentItem.id) {
           item.name = name
+          item.price = price,
+          item.brand = brand,
+          item.source = source,
+          item.amount = amount,
+          item.protein = protein,
+          item.fat = fat,
+          item.carbs = carbs,
+          item.servingSize = servingSize
           found = item
         }
       })
@@ -427,7 +448,7 @@ const UICtrl = (function () {
       console.log(`array from: ${tableItems}`)
       console.log(`item argument: ${item.id}`)
 
-      tableItems.forEach(function(tableItem) {
+      tableItems.forEach(function (tableItem) {
         const itemID = tableItem.getAttribute('id')
         // console.log(tableItem, itemID, tableItem.id)
         if (itemID === `item-${item.id}`) {
@@ -435,34 +456,77 @@ const UICtrl = (function () {
           // console.log(`this item matches: ${thisItem}`)
           // console.log(item.name, item.price)
 
-          thisItem.firstElementChild.innerHTML = `
-          <td>
-          <span class="display-flex">
-            <span class="item-name-data em">${item.name}</span>
+          thisItem.innerHTML = `
+                <td>
+        <span class="display-flex">
+          <span class="item-name-data em">${item.name}</span>
+        </span>
+        <span class="display-inline-block">
+          <span class="item item-brand-data">${item.brand}</span>,
+          <span class="item item-source-data">${item.source}</span>
+        </span>
+      </td>
+      <td>
+        <span class="display-flex vertical">
+          <span class="item item-amount-data">${item.amount}g</span>
+          <span class="item item-price-data">$${item.price}</span>
+        </span>
+      </td>
+      <td>
+        <span class="display-flex vertical fat">
+          <span class="item total-fat">${item.totalFat}g</span>
+          <span class="item price-per-gram-fat">$${item.pricePerFat}</span>
+        </span>
+      </td>
+      <td>
+        <span class="display-flex vertical carbs">
+          <span class="item total-carbs">${item.totalCarbs}g</span>
+          <span class="item price-per-gram-carbs">$${item.pricePerCarbs}</span>
+        </span>
+      </td>
+      <td>
+          <span class="display-flex vertical protein">
+            <span class="item total-protein">${item.totalProtein}g</span>
+            <span class="item price-per-gram-protein">$${item.pricePerProtein}</span>
           </span>
-          <span class="display-inline-block">
-            <span class="item item-brand-data">${item.brand}</span>,
-            <span class="item item-source-data">${item.source}</span>
-          </span>
-        </td>`
+        </td>
+      <td>
+        <span class="display-flex vertical calories">
+          <span class="item total-calories">${item.totalCalories}</span>
+          <span class="item price-per-gram-calories">$${item.pricePerCalorie}</span>
+        </span>
+      </td>
+      <td>
+        <a href="#" class="edit-item">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </td>`
         }
 
       })
     },
     clearInputFields: function () {
       document.querySelector(UISelectors.itemNameInput).value = '',
-        document.querySelector(UISelectors.itemPriceInput).value = '',
-        document.querySelector(UISelectors.itemBrandInput).value = '',
-        document.querySelector(UISelectors.itemSourceInput).value = '',
-        document.querySelector(UISelectors.itemAmountInput).value = '',
-        document.querySelector(UISelectors.itemProteinInput).value = '',
-        document.querySelector(UISelectors.itemFatInput).value = '',
-        document.querySelector(UISelectors.itemCarbsInput).value = '',
-        document.querySelector(UISelectors.itemServingSizeInput).value = ''
+      document.querySelector(UISelectors.itemPriceInput).value = '',
+      document.querySelector(UISelectors.itemBrandInput).value = '',
+      document.querySelector(UISelectors.itemSourceInput).value = '',
+      document.querySelector(UISelectors.itemAmountInput).value = '',
+      document.querySelector(UISelectors.itemProteinInput).value = '',
+      document.querySelector(UISelectors.itemFatInput).value = '',
+      document.querySelector(UISelectors.itemCarbsInput).value = '',
+      document.querySelector(UISelectors.itemServingSizeInput).value = ''
     },
     addItemToForm: function () {
-      document.querySelector(UISelectors.itemNameInput).value =
-        ItemCtrl.getCurrentItem().name
+      currentItem = ItemCtrl.getCurrentItem()
+      document.querySelector(UISelectors.itemNameInput).value = currentItem.name,
+      document.querySelector(UISelectors.itemPriceInput).value = currentItem.price,
+      document.querySelector(UISelectors.itemBrandInput).value = currentItem.brand,
+      document.querySelector(UISelectors.itemSourceInput).value = currentItem.source,
+      document.querySelector(UISelectors.itemAmountInput).value = currentItem.amount,
+      document.querySelector(UISelectors.itemProteinInput).value = currentItem.protein,
+      document.querySelector(UISelectors.itemFatInput).value = currentItem.fat,
+      document.querySelector(UISelectors.itemCarbsInput).value = currentItem.carbs,
+      document.querySelector(UISelectors.itemServingSizeInput).value = currentItem.servingSize
       UICtrl.showEditState()
     },
     hideTable: function () {
@@ -664,7 +728,8 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       // console.log('e.target edit-item success!')
       // Get list item ID
       const listID = e.target.parentNode.parentNode.parentNode.id
-      console.log(e.target, listID)
+      const item = e.target.parentNode.parentNode.parentNode
+      console.log(e.target, listID, item)
       // console.log(e.target.childNode.classList.contains('edit-item'))
 
       // split list-id string so we can get ID
@@ -693,7 +758,30 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     const input = UICtrl.getItemInput()
 
     // update item
-    const updatedItem = ItemCtrl.updateItem(input.name)
+    const updatedItem = ItemCtrl.updateItem(
+      input.name,
+      input.price,
+      input.brand,
+      input.source,
+      input.amount,
+      input.protein,
+      input.fat,
+      input.carbs,
+      input.servingSize
+    )
+    const data = ItemCtrl.getData()
+    const currentID = data.currentItem.id
+
+    const newItem = ItemCtrl.addItem(currentID,
+      updatedItem.name,
+      updatedItem.price,
+      updatedItem.brand,
+      updatedItem.source,
+      updatedItem.amount,
+      updatedItem.protein,
+      updatedItem.fat,
+      updatedItem.carbs,
+      updatedItem.servingSize)
     // a little refresher on basic functional logic:
     // here's my variable <updatedItem>
     // run this function  ItemCtrl.updateItem()
@@ -701,7 +789,8 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     // assign the value this returns to my variable
 
     // update UI
-    UICtrl.updateItemUI(updatedItem)
+    UICtrl.updateItemUI(newItem)
+    console.log(newItem)
 
     e.preventDefault()
   }
