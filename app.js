@@ -132,23 +132,32 @@ const ItemCtrl = (function () {
       })
       return newItems
     },
-    addItem: function (ID, name, price, brand, source, amount, protein, fat, carbs, servingSize) {
-
+    addItem: function (hasID, name, price, brand, source, amount, protein, fat, carbs, servingSize) {
+      let ID
+      console.log(`1.New ID: ${ID}, hasID: ${hasID}`)
       // create unique ID per item
-      
-      if(!ID) {
-        let ID
+    
+      if(hasID === null) {
+        
+        console.log('ID === null')
+        
         if (data.items.length > 0) {
-          ID = data.items[data.items.length - 1].id + 1
+          console.log(`data.items.length: ${data.items.length}`)
+          // const ID = data.items[data.items.length - 1].id + 1
+          ID = data.items.length
           // Length of items collection (eg 3 items)
           // Access the last item through array indexing (hence the '- 1')
           // Access the value of that item's ID property ('.id')
           // Add one more to create the next unique ID in sequence
-  
-        } else {
-          ID = 0
-        }
+          console.log(`after setting ID: ${ID}`)
+        } 
+        // else {
+        //   ID = 0
+        // }
+      } else {
+        ID = hasID
       }
+      console.log(`2.New ID: ${ID}, hasID: ${hasID}`)
 
       // Create new item
       let newItem = new Item(ID, name, price, brand, source, amount, protein, fat, carbs, servingSize)
@@ -431,9 +440,9 @@ const UICtrl = (function () {
         </span>
       </td>
       <td>
-        <a href="#" class="edit-item">
-          <i class="fa fa-pencil"></i>
-        </a>
+      <a href="#">
+      <i class="edit-item fa fa-pencil"></i>
+    </a>
       </td>
       `
       document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', tr)
@@ -456,7 +465,7 @@ const UICtrl = (function () {
           // console.log(`this item matches: ${thisItem}`)
           // console.log(item.name, item.price)
 
-          thisItem.innerHTML = `
+          markup = `
                 <td>
         <span class="display-flex">
           <span class="item-name-data em">${item.name}</span>
@@ -497,10 +506,12 @@ const UICtrl = (function () {
         </span>
       </td>
       <td>
-        <a href="#" class="edit-item">
-          <i class="fa fa-pencil"></i>
-        </a>
+      <a href="#">
+      <i class="edit-item fa fa-pencil"></i>
+    </a>
       </td>`
+
+      thisItem.innerHTML = markup
         }
 
       })
@@ -518,6 +529,7 @@ const UICtrl = (function () {
     },
     addItemToForm: function () {
       currentItem = ItemCtrl.getCurrentItem()
+      console.log(`addItemToForm: current item: ${currentItem.name}`)
       document.querySelector(UISelectors.itemNameInput).value = currentItem.name,
       document.querySelector(UISelectors.itemPriceInput).value = currentItem.price,
       document.querySelector(UISelectors.itemBrandInput).value = currentItem.brand,
@@ -676,6 +688,9 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     // update item submit event
     document.querySelector(UISelectors.updateItemButton).addEventListener('click', editItemUpdateSubmit)
+
+    // back button, clear fields
+    document.querySelector(UISelectors.backButton).addEventListener('click', UICtrl.clearEditState)
   }
 
   // Add item submit
@@ -697,6 +712,7 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
       console.log(input)
       // add item to UI
       const newItem = ItemCtrl.addItem(
+        null,
         input.name,
         input.price,
         input.brand,
@@ -790,7 +806,7 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     // update UI
     UICtrl.updateItemUI(newItem)
-    console.log(newItem)
+    UICtrl.clearEditState()
 
     e.preventDefault()
   }
