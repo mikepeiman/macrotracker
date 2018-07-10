@@ -164,14 +164,15 @@ const ItemCtrl = (function () {
     getData: function () {
       const totals = ItemCtrl.getTotals()
       const mealsCalc = ItemCtrl.calculateMeals(totals)
+      console.log(`getTotals() called from within getData()`)
       return data
     },
-    calculateNewItems: function (items) {
+    calculateNewItems: function () {
       // console.log(data.items)
       const newItems = []
       data.items.forEach(function (item) {
         let newItem = new Item(item.id, item.name, item.price, item.brand, item.source, item.amount, item.protein, item.fat, item.carbs, item.servingSize)
-        // console.log(`New item: ${newItem.name}`)
+        console.log(`calculateNewItems(): New item: ${newItem.name}`)
         newItems.push(newItem)
       })
       return newItems
@@ -205,7 +206,7 @@ const ItemCtrl = (function () {
 
       // Create new item
       let newItem = new Item(ID, name, price, brand, source, amount, protein, fat, carbs, servingSize)
-      console.log(`New item: ${newItem}`)
+      console.log(`addItem(): New item: ${newItem}`)
       // add to data items collection
       data.items.push(newItem)
       // return the item so we can pass it to UI controller
@@ -221,7 +222,9 @@ const ItemCtrl = (function () {
       // fetch items from data store
       const items = ItemCtrl.getItems()
       // expand items with additional computed properties
+      console.log(`New items calculated within getTotals(), below:`)
       const newItems = ItemCtrl.calculateNewItems(items)
+     
 
       // loop through items and calculate values
       newItems.forEach(function (item) {
@@ -233,7 +236,7 @@ const ItemCtrl = (function () {
       })
 
       totalFatSum = totalFatSum.toFixed(2)
-      totalCarbsSum - totalCarbsSum.toFixed(2)
+      totalCarbsSum = totalCarbsSum.toFixed(2)
       totalCaloriesSum = totalCaloriesSum.toFixed(2)
       totalProteinSum = totalProteinSum.toFixed(2)
       totalCostSum = totalCostSum.toFixed(2)
@@ -243,7 +246,12 @@ const ItemCtrl = (function () {
       data.totalCarbsSum = totalCarbsSum
       data.totalCaloriesSum = totalCaloriesSum
       data.totalCostSum = totalCostSum
-
+      console.log('within getTotals(), after calculation: ' +
+        totalProteinSum,
+        totalFatSum,
+        totalCarbsSum,
+        totalCaloriesSum,
+        totalCostSum)
       return {
         totalProteinSum,
         totalFatSum,
@@ -662,7 +670,7 @@ const UICtrl = (function () {
         tms,
         cpm
       }
-      this.showTotals()
+      // showTotals()
     },
     caloriesPerMeal: function () {
       let input = document.querySelector(UISelectors.calculateMealsByCalories)
@@ -678,7 +686,7 @@ const UICtrl = (function () {
         data.caloriesPerMeal = 800
       )
     },
-    showTotals: function (totals, mealsCalc, ppm) {
+    showTotals: function (totals, mealsCalc) {
       const data = ItemCtrl.getData()
 
       document.querySelector(UISelectors.UITotalProtein).textContent = totals.totalProteinSum
@@ -811,6 +819,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
       // get all totals
       const totals = ItemCtrl.getTotals()
       const mealsCalc = ItemCtrl.calculateMeals(totals)
+      console.log(`getTotals() called from within itemAddSubmit`)
       // add all totals to UI
       UICtrl.proteinPerMeal()
       UICtrl.showTotals(totals, mealsCalc)
@@ -876,16 +885,16 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     const data = ItemCtrl.getData()
     const currentID = data.currentItem.id
 
-    const newItem = ItemCtrl.addItem(currentID,
-      updatedItem.name,
-      updatedItem.price,
-      updatedItem.brand,
-      updatedItem.source,
-      updatedItem.amount,
-      updatedItem.protein,
-      updatedItem.fat,
-      updatedItem.carbs,
-      updatedItem.servingSize)
+    // const newItem = ItemCtrl.addItem(currentID,
+    //   updatedItem.name,
+    //   updatedItem.price,
+    //   updatedItem.brand,
+    //   updatedItem.source,
+    //   updatedItem.amount,
+    //   updatedItem.protein,
+    //   updatedItem.fat,
+    //   updatedItem.carbs,
+    //   updatedItem.servingSize)
     // a little refresher on basic functional logic:
     // here's my variable <updatedItem>
     // run this function  ItemCtrl.updateItem()
@@ -893,13 +902,14 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     // assign the value this returns to my variable
 
     // update storage
-    StorageCtrl.updateItemStorage(newItem)
+    StorageCtrl.updateItemStorage(updatedItem)
 
     // update UI
-    UICtrl.updateItemUI(newItem)
+    UICtrl.updateItemUI(updatedItem)
     // get all totals
     const totals = ItemCtrl.getTotals()
     const mealsCalc = ItemCtrl.calculateMeals(totals)
+    console.log(`getTotals() called from within itemUpdateSubmit`)
     // add all totals to UI
     UICtrl.proteinPerMeal()
     UICtrl.showTotals(totals, mealsCalc)
@@ -921,6 +931,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     // get all totals
     const totals = ItemCtrl.getTotals()
     const mealsCalc = ItemCtrl.calculateMeals(totals)
+    console.log(`getTotals() called from within itemDeleteSubmit`)
     // add all totals to UI
     UICtrl.proteinPerMeal()
     UICtrl.showTotals(totals, mealsCalc)
@@ -947,7 +958,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
       // hide the "calculate meals by calories" form as "by protein" is checked by default
       UICtrl.showMealsByProtein()
       // fetch items from data store
-      const items = ItemCtrl.getItems()
+      const items = StorageCtrl.getItems()
       // expand items with additional computed properties
       const newItems = ItemCtrl.calculateNewItems(items)
 
@@ -961,7 +972,9 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
 
       // get all totals
       const totals = ItemCtrl.getTotals()
+      console.log(`App.init(): totals: ${totals}`)
       const mealsCalc = ItemCtrl.calculateMeals(totals)
+      console.log(`App.init(): mealsCalc: ${mealsCalc}`)
       // add all totals to UI
       UICtrl.proteinPerMeal()
       UICtrl.showTotals(totals, mealsCalc)
