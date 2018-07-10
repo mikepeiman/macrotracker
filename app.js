@@ -25,6 +25,19 @@
 // ===============================================================
 const StorageCtrl = (function () {
   // console.log('storage controller active')
+
+  // public methods
+  return {
+    storeItem: function() {
+      
+    },
+    updateItem: function() {
+
+    },
+    deleteItem: function() {
+
+    }
+  }
 })()
 
 // ===============================================================
@@ -136,11 +149,11 @@ const ItemCtrl = (function () {
       let ID
       console.log(`1.New ID: ${ID}, hasID: ${hasID}`)
       // create unique ID per item
-    
-      if(hasID === null) {
-        
+
+      if (hasID === null) {
+
         console.log('ID === null')
-        
+
         if (data.items.length > 0) {
           console.log(`data.items.length: ${data.items.length}`)
           // const ID = data.items[data.items.length - 1].id + 1
@@ -150,7 +163,7 @@ const ItemCtrl = (function () {
           // Access the value of that item's ID property ('.id')
           // Add one more to create the next unique ID in sequence
           console.log(`after setting ID: ${ID}`)
-        } 
+        }
         // else {
         //   ID = 0
         // }
@@ -265,20 +278,20 @@ const ItemCtrl = (function () {
         if (item.id === data.currentItem.id) {
           item.name = name
           item.price = price,
-          item.brand = brand,
-          item.source = source,
-          item.amount = amount,
-          item.protein = protein,
-          item.fat = fat,
-          item.carbs = carbs,
-          item.servingSize = servingSize
+            item.brand = brand,
+            item.source = source,
+            item.amount = amount,
+            item.protein = protein,
+            item.fat = fat,
+            item.carbs = carbs,
+            item.servingSize = servingSize
           found = item
         }
       })
       return found
     },
-    deleteItem: function(id) {
-      ids = data.items.map(function(item) {
+    deleteItem: function (id) {
+      ids = data.items.map(function (item) {
         return item.id
       })
 
@@ -286,9 +299,12 @@ const ItemCtrl = (function () {
       const index = ids.indexOf(id)
 
       // delete from array via splice()
-      data.items.splice(index,1)
+      data.items.splice(index, 1)
 
       UICtrl.clearEditState()
+    },
+    clearAllItemsData: function() {
+      data.items = []
     }
   }
 })()
@@ -310,6 +326,7 @@ const UICtrl = (function () {
     updateItemButton: '#update-item-button',
     deleteItemButton: '#delete-item-button',
     backButton: '#back-button',
+    clearAllButton: '#clear-all-button',
     calculateMealsBy: '#calculate-meals-by',
     calculateMealsByCalories: '#calculate-meals-by-calories',
     calculateMealsByProtein: '#calculate-meals-by-protein',
@@ -525,39 +542,44 @@ const UICtrl = (function () {
     </a>
       </td>`
 
-      thisItem.innerHTML = markup
+          thisItem.innerHTML = markup
         }
 
       })
     },
-    deleteItemFromUI: function(id) {
+    deleteItemFromUI: function (id) {
       const itemID = `#item-${id}`
       const item = document.querySelector(itemID)
       item.remove()
     },
+    clearAllItemsUI: function() {
+      let UISelectors = UICtrl.getSelectors()
+      document.querySelector(UISelectors.itemList).innerHTML = ''
+    },
+    
     clearInputFields: function () {
       document.querySelector(UISelectors.itemNameInput).value = '',
-      document.querySelector(UISelectors.itemPriceInput).value = '',
-      document.querySelector(UISelectors.itemBrandInput).value = '',
-      document.querySelector(UISelectors.itemSourceInput).value = '',
-      document.querySelector(UISelectors.itemAmountInput).value = '',
-      document.querySelector(UISelectors.itemProteinInput).value = '',
-      document.querySelector(UISelectors.itemFatInput).value = '',
-      document.querySelector(UISelectors.itemCarbsInput).value = '',
-      document.querySelector(UISelectors.itemServingSizeInput).value = ''
+        document.querySelector(UISelectors.itemPriceInput).value = '',
+        document.querySelector(UISelectors.itemBrandInput).value = '',
+        document.querySelector(UISelectors.itemSourceInput).value = '',
+        document.querySelector(UISelectors.itemAmountInput).value = '',
+        document.querySelector(UISelectors.itemProteinInput).value = '',
+        document.querySelector(UISelectors.itemFatInput).value = '',
+        document.querySelector(UISelectors.itemCarbsInput).value = '',
+        document.querySelector(UISelectors.itemServingSizeInput).value = ''
     },
     addItemToForm: function () {
       currentItem = ItemCtrl.getCurrentItem()
       console.log(`addItemToForm: current item: ${currentItem.name}`)
       document.querySelector(UISelectors.itemNameInput).value = currentItem.name,
-      document.querySelector(UISelectors.itemPriceInput).value = currentItem.price,
-      document.querySelector(UISelectors.itemBrandInput).value = currentItem.brand,
-      document.querySelector(UISelectors.itemSourceInput).value = currentItem.source,
-      document.querySelector(UISelectors.itemAmountInput).value = currentItem.amount,
-      document.querySelector(UISelectors.itemProteinInput).value = currentItem.protein,
-      document.querySelector(UISelectors.itemFatInput).value = currentItem.fat,
-      document.querySelector(UISelectors.itemCarbsInput).value = currentItem.carbs,
-      document.querySelector(UISelectors.itemServingSizeInput).value = currentItem.servingSize
+        document.querySelector(UISelectors.itemPriceInput).value = currentItem.price,
+        document.querySelector(UISelectors.itemBrandInput).value = currentItem.brand,
+        document.querySelector(UISelectors.itemSourceInput).value = currentItem.source,
+        document.querySelector(UISelectors.itemAmountInput).value = currentItem.amount,
+        document.querySelector(UISelectors.itemProteinInput).value = currentItem.protein,
+        document.querySelector(UISelectors.itemFatInput).value = currentItem.fat,
+        document.querySelector(UISelectors.itemCarbsInput).value = currentItem.carbs,
+        document.querySelector(UISelectors.itemServingSizeInput).value = currentItem.servingSize
       UICtrl.showEditState()
     },
     hideTable: function () {
@@ -664,7 +686,7 @@ const UICtrl = (function () {
 // ===============================================================
 // ===============================================================
 
-const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
+const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
   // add a grocery item: this is an event. 
   // create "load event listeners" function to centralize this, similar
   // to setting UISelectors collection for scalability
@@ -713,6 +735,9 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     // delete button
     document.querySelector(UISelectors.deleteItemButton).addEventListener('click', itemDeleteSubmit)
+
+    // delete button
+    document.querySelector(UISelectors.clearAllButton).addEventListener('click', clearAllItems)
   }
 
   // Add item submit
@@ -833,22 +858,33 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     e.preventDefault()
   }
 
-  const itemDeleteSubmit = function(e) {
+  const itemDeleteSubmit = function (e) {
     // get current item by ID
     const currentItem = ItemCtrl.getCurrentItem()
 
     // delete from data structure
     ItemCtrl.deleteItem(currentItem.id)
-    
+
     // delete from UI
     UICtrl.deleteItemFromUI(currentItem.id)
 
-          // get all totals
-          const totals = ItemCtrl.getTotals()
-          const mealsCalc = ItemCtrl.calculateMeals(totals)
-          // add all totals to UI
-          UICtrl.proteinPerMeal()
-          UICtrl.showTotals(totals, mealsCalc)
+    // get all totals
+    const totals = ItemCtrl.getTotals()
+    const mealsCalc = ItemCtrl.calculateMeals(totals)
+    // add all totals to UI
+    UICtrl.proteinPerMeal()
+    UICtrl.showTotals(totals, mealsCalc)
+    e.preventDefault()
+  }
+
+  const clearAllItems = function (e) {
+    // delete all items from data structure
+    ItemCtrl.clearAllItemsData()
+
+    // delete all items from UI table
+    UICtrl.clearAllItemsUI()
+    UICtrl.clearEditState()
+    UICtrl.hideTable()
     e.preventDefault()
   }
 
@@ -885,6 +921,6 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
     }
   }
 
-})(ItemCtrl, UICtrl, StorageCtrl)
+})(ItemCtrl, StorageCtrl, UICtrl)
 
 App.init()
