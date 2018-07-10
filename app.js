@@ -60,12 +60,21 @@ const StorageCtrl = (function () {
       items.forEach(function (item, index) {
         if (updatedItem.id === item.id) {
           items.splice(index, 1, updatedItem)
-        }
-        localStorage.setItem('items', JSON.stringify(items))
+        }        
       })
+      localStorage.setItem('items', JSON.stringify(items))
     },
-    deleteItem: function () {
-
+    deleteItem: function (id) {
+      let items = JSON.parse(localStorage.getItem('items'))
+      items.forEach(function (item, index) {
+        if (id === item.id) {
+          items.splice(index, 1)
+        }        
+      })
+      localStorage.setItem('items', JSON.stringify(items))
+    },
+    clearAllItems: function() {
+      localStorage.removeItem('items')
     }
   }
 })()
@@ -228,11 +237,11 @@ const ItemCtrl = (function () {
 
       // loop through items and calculate values
       newItems.forEach(function (item) {
-        totalProteinSum += parseInt(item.totalProtein)
-        totalFatSum += parseInt(item.totalFat)
-        totalCarbsSum += parseInt(item.totalCarbs)
-        totalCaloriesSum += parseInt(item.totalCalories)
-        totalCostSum += parseInt(item.price)
+        totalProteinSum += parseFloat(item.totalProtein)
+        totalFatSum += parseFloat(item.totalFat)
+        totalCarbsSum += parseFloat(item.totalCarbs)
+        totalCaloriesSum += parseFloat(item.totalCalories)
+        totalCostSum += parseFloat(item.price)
       })
 
       totalFatSum = totalFatSum.toFixed(2)
@@ -311,7 +320,7 @@ const ItemCtrl = (function () {
     ) {
 
       // once I add all the variables,
-      // convert number values to number via parseInt()
+      // convert number values to number via parseFloat()
 
       let found = null
       data.items.forEach(function (item) {
@@ -345,6 +354,7 @@ const ItemCtrl = (function () {
     },
     clearAllItemsData: function () {
       data.items = []
+      StorageCtrl.clearAllItems()
     }
   }
 })()
@@ -643,7 +653,7 @@ const UICtrl = (function () {
     proteinPerMeal: function () {
       let input = document.querySelector(UISelectors.calculateMealsByProtein)
       let data = ItemCtrl.getData()
-      let ppm = parseInt(data.proteinPerMeal)
+      let ppm = parseFloat(data.proteinPerMeal)
       let tms
       // console.log(`tms: ${tms}`)
 
@@ -924,6 +934,9 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
 
     // delete from data structure
     ItemCtrl.deleteItem(currentItem.id)
+
+    // delete item from storage
+    StorageCtrl.deleteItem(currentItem.id)
 
     // delete from UI
     UICtrl.deleteItemFromUI(currentItem.id)
