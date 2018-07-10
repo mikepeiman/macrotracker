@@ -28,13 +28,43 @@ const StorageCtrl = (function () {
 
   // public methods
   return {
-    storeItem: function() {
-      
+    storeItem: function (item) {
+      let items
+      // check if any items exist in local storage
+      if (localStorage.getItem('items') === null) {
+        items = []
+        // push new item
+        items.push(item)
+        // set local storage
+        localStorage.setItem('items', JSON.stringify(items))
+      } else {
+        // get what's already in storage
+        items = JSON.parse(localStorage.getItem('items'))
+        // push new item
+        items.push(item)
+        // reset local storage
+        localStorage.setItem('items', JSON.stringify(items))
+      }
     },
-    updateItem: function() {
-
+    getItems: function () {
+      let items
+      if (localStorage.getItem('items') === null) {
+        items = []
+      } else {
+        items = JSON.parse(localStorage.getItem('items'))
+      }
+      return items
     },
-    deleteItem: function() {
+    updateItemStorage: function (updatedItem) {
+      let items = JSON.parse(localStorage.getItem('items'))
+      items.forEach(function (item, index) {
+        if (updatedItem.id === item.id) {
+          items.splice(index, 1, updatedItem)
+        }
+        localStorage.setItem('items', JSON.stringify(items))
+      })
+    },
+    deleteItem: function () {
 
     }
   }
@@ -69,44 +99,45 @@ const ItemCtrl = (function () {
 
   // Data structure / State
   const data = {
-    items: [
-      {
-        id: 0,
-        name: 'Cashews',
-        price: 18.99,
-        brand: 'Dan-D-Pack',
-        source: 'Loblaws',
-        amount: 900,
-        protein: 7,
-        fat: 19,
-        carbs: 12,
-        servingSize: 40
-      },
-      {
-        id: 1,
-        name: 'Protein Powder',
-        price: 49.99,
-        brand: 'Garden Of Life',
-        source: 'Body Energy Club',
-        amount: 969,
-        protein: 20,
-        fat: 1.5,
-        carbs: 8,
-        servingSize: 35
-      },
-      {
-        id: 2,
-        name: 'Dark Chocolate, 85%',
-        price: 2.69,
-        brand: 'President\'s Choice',
-        source: 'Save-On-Foods',
-        amount: 100,
-        protein: 4,
-        fat: 19,
-        carbs: 15,
-        servingSize: 40
-      }
-    ],
+    items: StorageCtrl.getItems(),
+    // [
+    //   {
+    //     id: 0,
+    //     name: 'Cashews',
+    //     price: 18.99,
+    //     brand: 'Dan-D-Pack',
+    //     source: 'Loblaws',
+    //     amount: 900,
+    //     protein: 7,
+    //     fat: 19,
+    //     carbs: 12,
+    //     servingSize: 40
+    //   },
+    //   {
+    //     id: 1,
+    //     name: 'Protein Powder',
+    //     price: 49.99,
+    //     brand: 'Garden Of Life',
+    //     source: 'Body Energy Club',
+    //     amount: 969,
+    //     protein: 20,
+    //     fat: 1.5,
+    //     carbs: 8,
+    //     servingSize: 35
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'Dark Chocolate, 85%',
+    //     price: 2.69,
+    //     brand: 'President\'s Choice',
+    //     source: 'Save-On-Foods',
+    //     amount: 100,
+    //     protein: 4,
+    //     fat: 19,
+    //     carbs: 15,
+    //     servingSize: 40
+    //   }
+    // ],
     currentItem: null, // this is intended for updates
     totalProteinSum: 0,
     totalFatSum: 0,
@@ -135,7 +166,7 @@ const ItemCtrl = (function () {
       const mealsCalc = ItemCtrl.calculateMeals(totals)
       return data
     },
-    calculateNewItems: function () {
+    calculateNewItems: function (items) {
       // console.log(data.items)
       const newItems = []
       data.items.forEach(function (item) {
@@ -147,22 +178,22 @@ const ItemCtrl = (function () {
     },
     addItem: function (hasID, name, price, brand, source, amount, protein, fat, carbs, servingSize) {
       let ID
-      console.log(`1.New ID: ${ID}, hasID: ${hasID}`)
+      // console.log(`1.New ID: ${ID}, hasID: ${hasID}`)
       // create unique ID per item
 
       if (hasID === null) {
 
-        console.log('ID === null')
+        console.log(`ID === null, data.items.length: ${data.items.length}`)
 
-        if (data.items.length > 0) {
-          console.log(`data.items.length: ${data.items.length}`)
+        if (data.items.length >= 0) {
+          // console.log(`data.items.length: ${data.items.length}`)
           // const ID = data.items[data.items.length - 1].id + 1
           ID = data.items.length
           // Length of items collection (eg 3 items)
           // Access the last item through array indexing (hence the '- 1')
           // Access the value of that item's ID property ('.id')
           // Add one more to create the next unique ID in sequence
-          console.log(`after setting ID: ${ID}`)
+          // console.log(`after setting ID: ${ID}`)
         }
         // else {
         //   ID = 0
@@ -170,7 +201,7 @@ const ItemCtrl = (function () {
       } else {
         ID = hasID
       }
-      console.log(`2.New ID: ${ID}, hasID: ${hasID}`)
+      // console.log(`2.New ID: ${ID}, hasID: ${hasID}`)
 
       // Create new item
       let newItem = new Item(ID, name, price, brand, source, amount, protein, fat, carbs, servingSize)
@@ -194,17 +225,18 @@ const ItemCtrl = (function () {
 
       // loop through items and calculate values
       newItems.forEach(function (item) {
-        totalProteinSum += item.totalProtein
-        totalFatSum += item.totalFat
-        totalCarbsSum += item.totalCarbs
-        totalCaloriesSum += item.totalCalories
-        totalCostSum += item.price
+        totalProteinSum += parseInt(item.totalProtein)
+        totalFatSum += parseInt(item.totalFat)
+        totalCarbsSum += parseInt(item.totalCarbs)
+        totalCaloriesSum += parseInt(item.totalCalories)
+        totalCostSum += parseInt(item.price)
       })
 
       totalFatSum = totalFatSum.toFixed(2)
       totalCarbsSum - totalCarbsSum.toFixed(2)
       totalCaloriesSum = totalCaloriesSum.toFixed(2)
       totalProteinSum = totalProteinSum.toFixed(2)
+      totalCostSum = totalCostSum.toFixed(2)
       // set totals values in data set
       data.totalProteinSum = totalProteinSum
       data.totalFatSum = totalFatSum
@@ -303,7 +335,7 @@ const ItemCtrl = (function () {
 
       UICtrl.clearEditState()
     },
-    clearAllItemsData: function() {
+    clearAllItemsData: function () {
       data.items = []
     }
   }
@@ -552,11 +584,11 @@ const UICtrl = (function () {
       const item = document.querySelector(itemID)
       item.remove()
     },
-    clearAllItemsUI: function() {
+    clearAllItemsUI: function () {
       let UISelectors = UICtrl.getSelectors()
       document.querySelector(UISelectors.itemList).innerHTML = ''
     },
-    
+
     clearInputFields: function () {
       document.querySelector(UISelectors.itemNameInput).value = '',
         document.querySelector(UISelectors.itemPriceInput).value = '',
@@ -728,7 +760,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     document.querySelector(UISelectors.itemList).addEventListener('click', itemEditClick)
 
     // update item submit event
-    document.querySelector(UISelectors.updateItemButton).addEventListener('click', editItemUpdateSubmit)
+    document.querySelector(UISelectors.updateItemButton).addEventListener('click', itemUpdateSumbit)
 
     // back button, clear fields
     document.querySelector(UISelectors.backButton).addEventListener('click', UICtrl.clearEditState)
@@ -774,6 +806,15 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
       UICtrl.addItemToUI(newItem)
       UICtrl.showTable()
 
+      // persist data to local storage
+      StorageCtrl.storeItem(newItem)
+      // get all totals
+      const totals = ItemCtrl.getTotals()
+      const mealsCalc = ItemCtrl.calculateMeals(totals)
+      // add all totals to UI
+      UICtrl.proteinPerMeal()
+      UICtrl.showTotals(totals, mealsCalc)
+
       // clear input fields
       UICtrl.clearInputFields()
 
@@ -815,7 +856,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     e.preventDefault
   }
 
-  const editItemUpdateSubmit = function (e) {
+  const itemUpdateSumbit = function (e) {
 
     // get item input
     const input = UICtrl.getItemInput()
@@ -851,8 +892,17 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     // feed it this data (argument): ItemCtrl.updateItem(input.name)
     // assign the value this returns to my variable
 
+    // update storage
+    StorageCtrl.updateItemStorage(newItem)
+
     // update UI
     UICtrl.updateItemUI(newItem)
+    // get all totals
+    const totals = ItemCtrl.getTotals()
+    const mealsCalc = ItemCtrl.calculateMeals(totals)
+    // add all totals to UI
+    UICtrl.proteinPerMeal()
+    UICtrl.showTotals(totals, mealsCalc)
     UICtrl.clearEditState()
 
     e.preventDefault()
@@ -893,6 +943,7 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     init: function () {
       // set initial buttonstate
       UICtrl.clearEditState()
+
       // hide the "calculate meals by calories" form as "by protein" is checked by default
       UICtrl.showMealsByProtein()
       // fetch items from data store
